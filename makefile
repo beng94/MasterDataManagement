@@ -1,0 +1,6 @@
+all: 
+	g++ -std=c++11 -Wall csvparser.h csvparser.c main.cpp -o OUT
+
+debug:
+	g++ -g -std=c++11 -Wall csvparser.h csvparser.c main.cpp -o OUT
+
