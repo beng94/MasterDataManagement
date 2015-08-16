@@ -1,3 +1,12 @@
+#include <string>
+#include <vector>
+
+//TODO: write a program to get the data out from the ground_truth file
+
+std::string trim(char *);
+void char_remove(std::string&, std::string);
+std::vector<std::string>& split(const std::string&, char, std::vector<std::string>&);
+
 class Name
 {
 public:
@@ -5,12 +14,7 @@ public:
     //title: DR, MD, INC, DDS, MS, DPM, OD, etc
     //name: store it in an array
 
-    Name(const char* name);
-
-private:
-    /* TODO:
-     * -trim the name
-     */
+    Name(std::string name);
 };
 
 class Address
@@ -21,7 +25,7 @@ public:
     //state
     //zip code
 
-    Address(const char* address);
+    Address(std::string addr);
 private:
     /* TODO:
      * - convert zip code
@@ -34,7 +38,7 @@ public:
     /*write members here*/
     //should have an array of taxonomies
 
-    Taxonomies(const char* taxonomies);
+    Taxonomies(std::string tax);
 };
 
 class Entity
@@ -44,4 +48,8 @@ public:
     Name name;
     Address address;
     Taxonomies taxonomies;
-}
+
+    Entity(int id, Name name, Address addr, Taxonomies tax) :
+           id{id}, name{name}, address{addr}, taxonomies{tax}
+    {}
+};
