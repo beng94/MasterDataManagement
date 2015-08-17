@@ -187,12 +187,18 @@ Name::get_title(std::string& name)
 void
 Name::get_nickname(std::string& name)
 {
-    //TODO: according to the available name list, try
-    //to replace  the 'short' name with the longer one
-    //1. read in the file into a map
-    //2. look for each word int that map and replace
-    //   the ones that are found with the first name
-    //   in the list
+    //TODO: There're names that can be a name and a nickname as well like 'ellen'
+    std::vector<std::string> chunks;
+    split(name, ' ', chunks);
+    for(auto str: chunks)
+    {
+        auto search = nicknames_map.find(trim(str));
+        if(search != nicknames_map.end())
+        {
+            std::cout << "nickname found: " << str << std::endl;
+            getchar();
+        }
+    }
 }
 
 Name::Name(std::string name)
@@ -207,6 +213,8 @@ Name::Name(std::string name)
 
     //To separate the title (mr, mrs, dr, ms..)
     this->get_title(name);
+
+    this->get_nickname(name);
 }
 
 Address::Address(std::string addr)
