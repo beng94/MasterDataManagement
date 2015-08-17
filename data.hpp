@@ -9,6 +9,8 @@ std::string join(std::vector<std::string>&, char, int , int);
 void char_remove(std::string&, std::string);
 std::vector<std::string>& split(const std::string&, char, std::vector<std::string>&);
 
+void read_nicknames(const char* file);
+
 class Name
 {
 public:

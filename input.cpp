@@ -32,6 +32,7 @@ read_file(const char* file)
             Address address(trim(rowFields[2]));
             Taxonomies taxonomies(trim(rowFields[3]));
 
+            //TODO: Store the entities in a container
             Entity entity(id, name, address, taxonomies);
             getchar();
         }

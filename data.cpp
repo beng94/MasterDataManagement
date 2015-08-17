@@ -3,6 +3,7 @@
 #include <sstream>
 #include <boost/algorithm/string.hpp>
 #include <unordered_map>
+#include <fstream>
 
 #include "data.hpp"
 
@@ -92,6 +93,44 @@ std::unordered_map<std::string, std::string> title_map =
     {"MRS", ""},
     {"MS", ""}
 };
+
+std::unordered_map<std::string, std::vector<std::string>> nicknames_map;
+
+/* Generates an unordered_map with the nicknames as the key
+ * and a vector of 'normal' names that can be associated with
+ * the nickname.
+*/
+void
+read_nicknames(const char *file_name)
+{
+    std::ifstream file(file_name);
+
+    std::string line;
+    while(std::getline(file, line))
+    {
+        //TODO: make line uppercase
+        std::vector<std::string> chunks;
+        split(line, ',', chunks);
+
+        for(uint i = 1; i < chunks.size(); i++)
+        {
+            //Look for the nickname in nicknames_map
+            auto search = nicknames_map.find(chunks.at(i));
+            if(search != nicknames_map.end())
+            {
+                search->second.push_back(chunks.at(0));
+                //std::cout << "pushed: " << search->first + " " + chunks.at(0);
+            }
+            else
+            {
+                nicknames_map.insert({trim(chunks.at(i)), {trim(chunks.at(0))}});
+                //std::cout << "inserted: " << trim(chunks.at(i)) + " " + trim(chunks.at(0));
+            }
+        }
+    }
+
+    file.close();
+}
 
 void
 Name::get_specs(std::string& name)

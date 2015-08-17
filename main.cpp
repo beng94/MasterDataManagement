@@ -1,5 +1,11 @@
 #include "input.hpp"
+#include "data.hpp"
 
-int main() {
-   read_file("training_data.csv");
+int main()
+{
+    read_nicknames("names.csv");
+
+    read_file("training_data.csv");
+
+    return 0;
 }
