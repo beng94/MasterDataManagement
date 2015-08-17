@@ -143,6 +143,17 @@ Name::get_title(std::string& name)
     std::cout << "new name: " << name << std::endl;
 }
 
+void
+Name::get_nickname(std::string& name)
+{
+    //TODO: according to the available name list, try
+    //to replace  the 'short' name with the longer one
+    //1. read in the file into a map
+    //2. look for each word int that map and replace
+    //   the ones that are found with the first name
+    //   in the list
+}
+
 Name::Name(std::string name)
 {
     std::cout << name << std::endl;

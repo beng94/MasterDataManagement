@@ -21,6 +21,7 @@ public:
 private:
     void get_specs(std::string& name);
     void get_title(std::string& name);
+    void get_nickname(std::string& name);
 };
 
 class Address
