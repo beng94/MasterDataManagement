@@ -93,11 +93,44 @@ std::unordered_map<std::string, std::string> title_map =
     {"MS", ""}
 };
 
+void
+Name::get_specs(std::string& name)
+{
     //Split name by ',' to separate the end
     std::vector<std::string> items;
     split(name, ',', items);
 
+    //TODO: write it with a reverser iterator
+    for(int i = items.size()-1; i >= 0; i--)
+    {
+        //Looking for the known specs int the specs_map
+        auto search = specs_map.find(trim(items.at(i)));
+        if(search != specs_map.end())
+        {
+            this->specs.push_back(search->first);
+            std::cout << "specs found: " << search->first << std::endl;
+        }
+        else
+        {
+            //this->specs.push_back("UNKNOWN");
+            std::cout << "specs NOT FOUND: " << items.at(i) << std::endl;
+
+            //To remove the found specs from the end of the name
+            name = join(items, ' ', 0, i);
+            std::cout << "new name: " << name << std::endl;
+            break;
+        }
+    }
+}
+Name::Name(std::string name)
+{
     std::cout << name << std::endl;
+
+    //Remove points from the name
+    char_remove(name, std::string("."));
+
+    //To separate the specs
+    this->get_specs(name);
 }
 
 Address::Address(std::string addr)

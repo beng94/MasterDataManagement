@@ -15,8 +15,12 @@ public:
     /*write members here*/
     //title: DR, MD, INC, DDS, MS, DPM, OD, etc
     //name: store it in an array
+    std::vector<std::string> specs;
 
     Name(std::string name);
+
+private:
+    void get_specs(std::string& name);
 };
 
 class Address
