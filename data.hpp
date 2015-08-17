@@ -13,14 +13,14 @@ class Name
 {
 public:
     /*write members here*/
-    //title: DR, MD, INC, DDS, MS, DPM, OD, etc
-    //name: store it in an array
+    std::string title;
     std::vector<std::string> specs;
 
     Name(std::string name);
 
 private:
     void get_specs(std::string& name);
+    void get_title(std::string& name);
 };
 
 class Address

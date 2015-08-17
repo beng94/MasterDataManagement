@@ -122,6 +122,27 @@ Name::get_specs(std::string& name)
         }
     }
 }
+
+void
+Name::get_title(std::string& name)
+{
+    std::vector<std::string> chunks;
+    split(name, ' ', chunks);
+
+    //I think it's enough if we just check the first chunk
+    auto search = title_map.find(trim(chunks.front()));
+    if(search != title_map.end())
+    {
+        this->title = search->first;
+        std::cout << "title found: " << search->first << std::endl;
+    }
+    else
+        std::cout << "title NOT FOUND" << std::endl;
+
+    name = join(chunks, ' ', 1, chunks.size()-1);
+    std::cout << "new name: " << name << std::endl;
+}
+
 Name::Name(std::string name)
 {
     std::cout << name << std::endl;
@@ -131,6 +152,9 @@ Name::Name(std::string name)
 
     //To separate the specs
     this->get_specs(name);
+
+    //To separate the title (mr, mrs, dr, ms..)
+    this->get_title(name);
 }
 
 Address::Address(std::string addr)
