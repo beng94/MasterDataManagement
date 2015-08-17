@@ -108,7 +108,9 @@ read_nicknames(const char *file_name)
     std::string line;
     while(std::getline(file, line))
     {
-        //TODO: make line uppercase
+        //Make it uppercase
+        boost::to_upper(line);
+
         std::vector<std::string> chunks;
         split(line, ',', chunks);
 
