@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <sstream>
 #include <boost/algorithm/string.hpp>
+#include <unordered_map>
 
 #include "data.hpp"
 
@@ -34,10 +35,41 @@ split(const std::string &str, char delim, std::vector<std::string> &elems)
     return elems;
 }
 
-Name::Name(std::string name)
+//TODO: what about INC?
+std::unordered_map<std::string, std::string> specs_map =
 {
-    //Remove points from the name
-    char_remove(name, std::string("."));
+    {"PHD", "majom"},
+    {"MD", ""},
+    {"PA", ""},
+    {"DDS", ""},
+    {"CNP", ""},
+    {"ATC", ""},
+    {"LAT", ""},
+    {"CRNA", ""},
+    {"DPM", ""},
+    {"OD", ""},
+    {"ANP", ""},
+    {"MSW", "MASTER OF SOCIAL WORK"},
+    {"LCSW", "LICENSED CLINICAL SOCIAL WORKER"},
+    {"RPH", "REGISTERED PHARMACIST"},
+    {"MSPT", "MASTER OF SCIENCE IN PHYSICAL THERAPY"},
+    {"DO", ""},
+    {"DDS", ""},
+    {"MS", ""},
+    {"FNP", "FAMILY NURSE PRACTIONER"},
+    {"ACSW", "ACADEMY OF CERTIFIED SOCIAL WORKERS"},
+    {"PA-C", "PHYSICIAN ASSISTANT CERTIFIED"},
+    {"AA-C", "CERTIFIED ANESTHESIOLOGIST ASSISTANT"},
+    {"RPH", "REGISTERED PHARMACIST"}
+};
+
+std::unordered_map<std::string, std::string> title_map =
+{
+    {"DR", ""},
+    {"MR", ""},
+    {"MRS", ""},
+    {"MS", ""}
+};
 
     //Split name by ',' to separate the end
     std::vector<std::string> items;
