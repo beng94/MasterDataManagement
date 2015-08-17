@@ -15,6 +15,28 @@ trim(char *s)
     return str;
 }
 
+std::string
+trim(std::string str)
+{
+    boost::trim(str);
+    return str;
+}
+
+std::string
+join(std::vector<std::string>& vec, char sep, int start, int end)
+{
+    std::string str = "";
+    for(int i = start; i <= end; i++)
+    {
+        if(i != end)
+            str += vec.at(i) + sep;
+        else
+            str += vec.at(i);
+    }
+
+    return str;
+}
+
 void
 char_remove(std::string& str, std::string remove_chars)
 {
