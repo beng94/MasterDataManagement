@@ -1,16 +1,8 @@
 #include <vector>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
-
 #include "data.hpp"
 #include "Address.h"
-
-void ConvertStreetIdentifier(std::string *spStreetIdentifier){
-	if (*spStreetIdentifier == "RD")
-		*spStreetIdentifier = "Road";
-	if (*spStreetIdentifier == "BLVD" || *spStreetIdentifier == "BLV")
-		*spStreetIdentifier = "Boulevard";
-}
 
 bool IsANumber(char cCharacter){
 	if (cCharacter >= '0' && cCharacter <= '9')
@@ -24,31 +16,38 @@ void ConvertStateName(std::string *spStateName){
 
 
 CAddress::CAddress(std::string sAddressString){
-	std::vector<std::string> saCommaSeparatedFields;
-	split(sAddressString, ',', saCommaSeparatedFields);
-	int iFirstFieldsSize = saCommaSeparatedFields.size();
+
+	std::vector<std::string> saFields;
+	split(sAddressString, ',', saFields);
+	int iFirstFieldsSize = saFields.size();
 	if (iFirstFieldsSize > 4){
 		for (int i = 0; i < iFirstFieldsSize; i++)
-			std::cout << saCommaSeparatedFields[i] << std::endl;
+			std::cout << saFields[i] << std::endl;
 	}
-	std::vector<std::string> saHouseNumberToStreetIdentifier;
-	boost::trim(saCommaSeparatedFields[0]);
-	split(saCommaSeparatedFields[0], ' ', saHouseNumberToStreetIdentifier);
-	if (saHouseNumberToStreetIdentifier[0] == "PO"){
+	///< Separates based on commas, checks if the address is irregular
+
+	std::vector<std::string> saStreetName;
+	boost::trim(saFields[0]);
+	split(saFields[0], ' ', saStreetName);
+	if (saStreetName[0] == "PO"){
 		mbIsAPOBox = true;
-		miHouseNumber = boost::lexical_cast<int>(saHouseNumberToStreetIdentifier.back());
+		miHouseNumber = boost::lexical_cast<int>(saStreetName.back());
 	}
 	else{
 		mbIsAPOBox = false;
-		miHouseNumber = boost::lexical_cast<int>(saHouseNumberToStreetIdentifier.front());
-		for (int i = 1; i < saHouseNumberToStreetIdentifier.size(); i++)
-			msStreet += saHouseNumberToStreetIdentifier[i];
+		miHouseNumber = boost::lexical_cast<int>(saStreetName.front());
+		for (int i = 1; i < saStreetName.size(); i++)
+			msStreet += saStreetName[i];
 	}
-	msCountry = trim(saCommaSeparatedFields[iFirstFieldsSize-1]);
+	///< Takes the first field and parses it accordingly
+
+	msCountry = trim(saFields[iFirstFieldsSize - 1]);
 	std::vector<std::string> saStateAndZipCode;
-	boost::trim(saCommaSeparatedFields[iFirstFieldsSize - 2]);
-	split(saCommaSeparatedFields[iFirstFieldsSize-2], ' ', saStateAndZipCode);
+	boost::trim(saFields[iFirstFieldsSize - 2]);
+	split(saFields[iFirstFieldsSize - 2], ' ', saStateAndZipCode);
 	msState = trim(saStateAndZipCode[0]);
+	///< Parses the country and the State, prepares for parsing the zip code
+
 	std::vector<std::string> saZipCode;
 	boost::trim(saStateAndZipCode[1]);
 	split(saStateAndZipCode[1], '-', saZipCode);
@@ -56,14 +55,24 @@ CAddress::CAddress(std::string sAddressString){
 		miZipCode = boost::lexical_cast<int>(saZipCode[0]) * 10000 + boost::lexical_cast<int>(saZipCode[1]);
 	else
 		miZipCode = boost::lexical_cast<int>(saZipCode[0]);
-	msCity = trim(saCommaSeparatedFields[iFirstFieldsSize - 3]);
+	///< Parses the zip code based on 5 and 9 digit variations
+
+	/// Parses the City
+	msCity = trim(saFields[iFirstFieldsSize - 3]);
 	if (iFirstFieldsSize > 4){
-		for (int i = 1; i < iFirstFieldsSize - 2; i++){
-			msOtherStuff += saCommaSeparatedFields[i];
+		for (int i = 1; i < iFirstFieldsSize - 3; i++){
+			msOtherStuff += saFields[i];
 		}
 	}
-	std::cout << miHouseNumber << std::endl << mbIsAPOBox << std::endl << msStreet << std::endl << msStreetIdentifier << std::endl;
-	std::cout << miApartmentNumber << std::endl << msCity << std::endl << msState << std::endl << miZipCode << std::endl << msCountry << std::endl;
+	///< Parses any and all remaining non-standard fields
+
+	/// Creates the hashes
+	msCityHash = str_hash(msCity);
+	msStreetHash = str_hash(msStreet);
+
+	/// Debug
+	std::cout << miHouseNumber << std::endl << mbIsAPOBox << std::endl << msStreet << std::endl;
+	std::cout << msCity << std::endl << msState << std::endl << miZipCode << std::endl << msCountry << std::endl;
 	std::cout << "Other things:" << std::endl << msOtherStuff << std::endl;
 
 }
