@@ -226,12 +226,6 @@ Name::Name(std::string name)
     this->get_nickname(name);
 }
 
-Address::Address(std::string addr)
-{
-    //TODO
-    std::cout << addr << std::endl;
-}
-
 Taxonomies::Taxonomies(std::string tax)
 {
     //TODO

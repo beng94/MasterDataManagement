@@ -1,3 +1,6 @@
+#ifndef ADDRESS_H
+#define ADDRESS_H
+
 #include <string>
 #include <iostream>
 
@@ -9,11 +12,13 @@ class CAddress{
 	int miHouseNumber;
 	int miApartmentNumber;
 	int miZipCode;
+    bool mbIsAPOBox;
 	std::string msStreet;
 	std::string msStreetIdentifier;
 	std::string msCity;
 	std::string msState;
 	std::string msCountry;
+    std::string msOtherStuff;
 
 public:
 
@@ -21,3 +26,5 @@ public:
 
 	double IsTheSame(CAddress qOtherAddress);
 };
+
+#endif

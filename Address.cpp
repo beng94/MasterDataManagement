@@ -1,5 +1,9 @@
-#include "Address.h"
 #include <vector>
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
+
+#include "data.hpp"
+#include "Address.h"
 
 void ConvertStreetIdentifier(std::string *spStreetIdentifier){
 	if (*spStreetIdentifier == "RD")
@@ -22,7 +26,7 @@ void ConvertStateName(std::string *spStateName){
 CAddress::CAddress(std::string sAddressString){
 	std::vector<std::string> saCommaSeparatedFields;
 	split(sAddressString, ',', saCommaSeparatedFields);
-	int iFirstFieldsSize = saCommaSeparatedFields.size;
+	int iFirstFieldsSize = saCommaSeparatedFields.size();
 	if (iFirstFieldsSize > 4){
 		for (int i = 0; i < iFirstFieldsSize; i++)
 			std::cout << saCommaSeparatedFields[i] << std::endl;
@@ -32,12 +36,12 @@ CAddress::CAddress(std::string sAddressString){
 	split(saCommaSeparatedFields[0], ' ', saHouseNumberToStreetIdentifier);
 	if (saHouseNumberToStreetIdentifier[0] == "PO"){
 		mbIsAPOBox = true;
-		miHouseNumber = boost::lexical_cast<int>(saHouseNumberToStreetIdentifier.back);
+		miHouseNumber = boost::lexical_cast<int>(saHouseNumberToStreetIdentifier.back());
 	}
 	else{
 		mbIsAPOBox = false;
-		miHouseNumber = boost::lexical_cast<int>(saHouseNumberToStreetIdentifier.front);
-		for (int i = 1; i < saHouseNumberToStreetIdentifier.size; i++)
+		miHouseNumber = boost::lexical_cast<int>(saHouseNumberToStreetIdentifier.front());
+		for (int i = 1; i < saHouseNumberToStreetIdentifier.size(); i++)
 			msStreet += saHouseNumberToStreetIdentifier[i];
 	}
 	msCountry = trim(saCommaSeparatedFields[iFirstFieldsSize-1]);
@@ -48,7 +52,7 @@ CAddress::CAddress(std::string sAddressString){
 	std::vector<std::string> saZipCode;
 	boost::trim(saStateAndZipCode[1]);
 	split(saStateAndZipCode[1], '-', saZipCode);
-	if (saZipCode.size > 1)
+	if (saZipCode.size() > 1)
 		miZipCode = boost::lexical_cast<int>(saZipCode[0]) * 10000 + boost::lexical_cast<int>(saZipCode[1]);
 	else
 		miZipCode = boost::lexical_cast<int>(saZipCode[0]);

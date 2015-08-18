@@ -1,6 +1,8 @@
 #include <string>
 #include <vector>
 
+#include "Address.h"
+
 //TODO: write a program to get the data out from the ground_truth file
 
 std::string trim(char *);
@@ -26,21 +28,6 @@ private:
     void get_nickname(std::string& name);
 };
 
-class Address
-{
-public:
-    /*write members here*/
-    //country
-    //state
-    //zip code
-
-    Address(std::string addr);
-private:
-    /* TODO:
-     * - convert zip code
-     */
-};
-
 class Taxonomies
 {
 public:
@@ -55,10 +42,10 @@ class Entity
 public:
     int id;
     Name name;
-    Address address;
+    CAddress address;
     Taxonomies taxonomies;
 
-    Entity(int id, Name name, Address addr, Taxonomies tax) :
+    Entity(int id, Name name, CAddress addr, Taxonomies tax) :
            id{id}, name{name}, address{addr}, taxonomies{tax}
     {}
 };
