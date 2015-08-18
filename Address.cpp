@@ -1,4 +1,5 @@
 #include "Address.h"
+#include <vector>
 
 void ConvertStreetIdentifier(std::string *spStreetIdentifier){
 	if (*spStreetIdentifier == "RD")
@@ -17,86 +18,50 @@ void ConvertStateName(std::string *spStateName){
 
 }
 
+
 CAddress::CAddress(std::string sAddressString){
-	miHouseNumber = miApartmentNumber = miZipCode = 0;
-	char cParsingCharacter;
-	int iIterator = 1;
-	cParsingCharacter = sAddressString[iIterator];
-	while (!isspace(cParsingCharacter)){ //Getting the House Number
-		miHouseNumber = miHouseNumber * 10 + (cParsingCharacter - '0');
-		iIterator++;
-		cParsingCharacter = sAddressString[iIterator];
+	std::vector<std::string> saCommaSeparatedFields;
+	split(sAddressString, ',', saCommaSeparatedFields);
+	int iFirstFieldsSize = saCommaSeparatedFields.size;
+	if (iFirstFieldsSize > 4){
+		for (int i = 0; i < iFirstFieldsSize; i++)
+			std::cout << saCommaSeparatedFields[i] << std::endl;
 	}
-	iIterator++;
-	cParsingCharacter = sAddressString[iIterator];
-	while (!isspace(cParsingCharacter)){ //Getting the Street
-		msStreet += cParsingCharacter;
-		iIterator++;
-		cParsingCharacter = sAddressString[iIterator];
-	}
-	iIterator++;
-	cParsingCharacter = sAddressString[iIterator];
-	while (cParsingCharacter != ','){ // Getting the Street Identifier (Road, Boulevard etc.)
-		msStreetIdentifier += cParsingCharacter;
-		iIterator++;
-		cParsingCharacter = sAddressString[iIterator];
-	}
-	ConvertStreetIdentifier(&msStreetIdentifier);
-	iIterator += 2;
-	cParsingCharacter = sAddressString[iIterator];
-	if (cParsingCharacter != '#' && !IsANumber(cParsingCharacter)){// Getting City or Apartment Number and City
-		while (cParsingCharacter != ','){
-			msCity += cParsingCharacter;
-			iIterator++;
-			cParsingCharacter = sAddressString[iIterator];
-		}
+	std::vector<std::string> saHouseNumberToStreetIdentifier;
+	boost::trim(saCommaSeparatedFields[0]);
+	split(saCommaSeparatedFields[0], ' ', saHouseNumberToStreetIdentifier);
+	if (saHouseNumberToStreetIdentifier[0] == "PO"){
+		mbIsAPOBox = true;
+		miHouseNumber = boost::lexical_cast<int>(saHouseNumberToStreetIdentifier.back);
 	}
 	else{
-		while (cParsingCharacter != ','){
-			if (cParsingCharacter == '#'){
-				iIterator++;
-				cParsingCharacter = sAddressString[iIterator];
-			}
-			miApartmentNumber = miApartmentNumber * 10 + (cParsingCharacter - '0');
-			iIterator++;
-			cParsingCharacter = sAddressString[iIterator];
+		mbIsAPOBox = false;
+		miHouseNumber = boost::lexical_cast<int>(saHouseNumberToStreetIdentifier.front);
+		for (int i = 1; i < saHouseNumberToStreetIdentifier.size; i++)
+			msStreet += saHouseNumberToStreetIdentifier[i];
+	}
+	msCountry = trim(saCommaSeparatedFields[iFirstFieldsSize-1]);
+	std::vector<std::string> saStateAndZipCode;
+	boost::trim(saCommaSeparatedFields[iFirstFieldsSize - 2]);
+	split(saCommaSeparatedFields[iFirstFieldsSize-2], ' ', saStateAndZipCode);
+	msState = trim(saStateAndZipCode[0]);
+	std::vector<std::string> saZipCode;
+	boost::trim(saStateAndZipCode[1]);
+	split(saStateAndZipCode[1], '-', saZipCode);
+	if (saZipCode.size > 1)
+		miZipCode = boost::lexical_cast<int>(saZipCode[0]) * 10000 + boost::lexical_cast<int>(saZipCode[1]);
+	else
+		miZipCode = boost::lexical_cast<int>(saZipCode[0]);
+	msCity = trim(saCommaSeparatedFields[iFirstFieldsSize - 3]);
+	if (iFirstFieldsSize > 4){
+		for (int i = 1; i < iFirstFieldsSize - 2; i++){
+			msOtherStuff += saCommaSeparatedFields[i];
 		}
-		iIterator += 2;
-		cParsingCharacter = sAddressString[iIterator];
-		while (cParsingCharacter != ','){
-			msCity += cParsingCharacter;
-			iIterator++;
-			cParsingCharacter = sAddressString[iIterator];
-		}
 	}
-	iIterator += 2;
-	cParsingCharacter = sAddressString[iIterator];
-	while (!isspace(cParsingCharacter)){ //Getting the State
-		msState += cParsingCharacter;
-		iIterator++;
-		cParsingCharacter = sAddressString[iIterator];
-	}
-	// ConvertStateName(msState);
-	iIterator++;
-	cParsingCharacter = sAddressString[iIterator];
-	while (cParsingCharacter != ','){ //Getting and converting the Zip Code
-		if (cParsingCharacter == '-'){
-			iIterator++;
-			cParsingCharacter = sAddressString[iIterator];
-		}
-		miZipCode = miZipCode * 10 + (cParsingCharacter - '0');
-		iIterator++;
-		cParsingCharacter = sAddressString[iIterator];
-	}
-	iIterator += 2;
-	cParsingCharacter = sAddressString[iIterator];
-	while (cParsingCharacter != '"'){ //Getting the Country
-		msCountry += cParsingCharacter;
-		iIterator++;
-		cParsingCharacter = sAddressString[iIterator];
-	}
-	std::cout << miHouseNumber << std::endl << msStreet << std::endl << msStreetIdentifier << std::endl;
+	std::cout << miHouseNumber << std::endl << mbIsAPOBox << std::endl << msStreet << std::endl << msStreetIdentifier << std::endl;
 	std::cout << miApartmentNumber << std::endl << msCity << std::endl << msState << std::endl << miZipCode << std::endl << msCountry << std::endl;
+	std::cout << "Other things:" << std::endl << msOtherStuff << std::endl;
+
 }
 
 double CAddress::IsTheSame(CAddress qOtherAddress){

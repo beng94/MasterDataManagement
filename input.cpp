@@ -4,6 +4,7 @@
 
 #include "data.hpp"
 #include "csvparser.h"
+#include "Address.h"
 
 static char** parse_line(CsvParser *parser)
 {
@@ -29,7 +30,7 @@ read_file(const char* file)
 
             int id = boost::lexical_cast<int>(rowFields[0]);
             Name name(trim(rowFields[1]));
-            Address address(trim(rowFields[2]));
+            CAddress address(trim(rowFields[2]));
             Taxonomies taxonomies(trim(rowFields[3]));
 
             //TODO: Store the entities in a container
