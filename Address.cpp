@@ -20,7 +20,7 @@ void ConvertStateName(std::string *spStateName){
 CAddress::CAddress(std::string sAddressString){
 	miHouseNumber = miApartmentNumber = miZipCode = 0;
 	char cParsingCharacter;
-	int iIterator = 0;
+	int iIterator = 1;
 	cParsingCharacter = sAddressString[iIterator];
 	while (!isspace(cParsingCharacter)){ //Getting the House Number
 		miHouseNumber = miHouseNumber * 10 + (cParsingCharacter - '0');
