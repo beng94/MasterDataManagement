@@ -1,8 +1,10 @@
 #ifndef ADDRESS_H
 #define ADDRESS_H
 
+#include "stdafx.h"
 #include <string>
 #include <iostream>
+#include "data.hpp"
 
 void ConvertStreetIdentifier(std::string *spStreetIdentifier);
 bool IsANumber(char cCharacter);
@@ -12,13 +14,13 @@ class CAddress{
 	int miHouseNumber;
 	int miApartmentNumber;
 	int miZipCode;
-    bool mbIsAPOBox;
 	std::string msStreet;
 	std::string msStreetIdentifier;
 	std::string msCity;
 	std::string msState;
 	std::string msCountry;
-    std::string msOtherStuff;
+	std::string msOtherStuff;
+	bool mbIsAPOBox;
 
 public:
 
