@@ -1,7 +1,6 @@
 #ifndef ADDRESS_H
 #define ADDRESS_H
 
-#include "stdafx.h"
 #include <string>
 #include <iostream>
 #include "data.hpp"
