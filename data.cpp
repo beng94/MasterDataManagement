@@ -6,6 +6,7 @@
 #include <fstream>
 
 #include "data.hpp"
+#include "double_metaphone.h"
 
 std::string
 trim(char *s)
@@ -56,6 +57,14 @@ split(const std::string &str, char delim, std::vector<std::string> &elems)
         elems.push_back(item);
 
     return elems;
+}
+
+std::string
+str_hash(std::string& str)
+{
+    std::vector<std::string> codes;
+    DoubleMetaphone(str, &codes);
+    return codes[0] + codes[1];
 }
 
 //TODO: what about INC?
