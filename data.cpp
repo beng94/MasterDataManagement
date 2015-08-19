@@ -185,16 +185,16 @@ Name::get_specs(std::string& name)
         if(search != specs_map.end())
         {
             this->specs.push_back(search->first);
-            std::cout << "specs found: " << search->first << std::endl;
+            //std::cout << "specs found: " << search->first << std::endl;
         }
         else
         {
             //this->specs.push_back("UNKNOWN");
-            std::cout << "specs NOT FOUND: " << items.at(i) << std::endl;
+            //std::cout << "specs NOT FOUND: " << items.at(i) << std::endl;
 
             //To remove the found specs from the end of the name
             name = join(items, ' ', 0, i);
-            std::cout << "new name: " << name << std::endl;
+            //std::cout << "new name: " << name << std::endl;
             break;
         }
     }
@@ -211,13 +211,13 @@ Name::get_title(std::string& name)
     if(search != title_map.end())
     {
         this->title = search->first;
-        std::cout << "title found: " << search->first << std::endl;
+        //std::cout << "title found: " << search->first << std::endl;
     }
     else
-        std::cout << "title NOT FOUND" << std::endl;
+        //std::cout << "title NOT FOUND" << std::endl;
 
     name = join(chunks, ' ', 1, chunks.size()-1);
-    std::cout << "new name: " << name << std::endl;
+    //std::cout << "new name: " << name << std::endl;
 }
 
 void
@@ -231,15 +231,15 @@ Name::get_nickname(std::string& name)
         auto search = nicknames_map.find(trim(str));
         if(search != nicknames_map.end())
         {
-            std::cout << "nickname found: " << str << std::endl;
-            getchar();
+            //std::cout << "nickname found: " << str << std::endl;
+            //getchar();
         }
     }
 }
 
 Name::Name(std::string name)
 {
-    std::cout << name << std::endl;
+    //std::cout << name << std::endl;
 
     //Remove points from the name
     char_remove(name, std::string("."));
@@ -256,5 +256,5 @@ Name::Name(std::string name)
 Taxonomies::Taxonomies(std::string tax)
 {
     //TODO
-    std::cout << tax << std::endl;
+    //std::cout << tax << std::endl;
 }
