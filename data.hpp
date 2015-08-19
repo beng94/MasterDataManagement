@@ -18,6 +18,7 @@ class Name
 {
 public:
     /*write members here*/
+    std::string name;
     std::string title;
     std::vector<std::string> specs;
 
