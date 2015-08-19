@@ -70,6 +70,8 @@ str_hash(std::string& str)
 //TODO: what about INC, LLC?
 std::unordered_map<std::string, std::string> specs_map =
 {
+    {"INC", ""},
+    {"LLC", ""},
     {"PHD", "majom"},
     {"MD", ""},
     {"M D", ""},
@@ -119,7 +121,54 @@ std::unordered_map<std::string, std::string> specs_map =
     {"ACNP", ""},
     {"DMD", ""},
     {"D C", ""},
-    {"MBA", ""}
+    {"MBA", ""},
+    {"PSY", ""},
+    {"LTD", ""},
+    {"MSD", ""},
+    {"NP", ""},
+    {"LICSW", ""},
+    {"SCO", ""},
+    {"PT", ""},
+    {"CRNP", ""},
+    {"APRN", ""},
+    {"MDD", ""},
+    {"LLP", ""},
+    {"ARPN", ""},
+    {"FAAP", ""},
+    {"BMBS", ""},
+    {"LSW", ""},
+    {"LP", ""},
+    {"ART", ""},
+    {"ACDC", ""},
+    {"CLPC", ""},
+    {"RPT", ""},
+    {"PTA", ""},
+    {"RD", ""},
+    {"CFNP", ""},
+    {"LTA", ""},
+    {"PT", ""},
+    {"LMHC", ""},
+    {"DNP", ""},
+    {"NIC", ""},
+    {"PHARMD", ""},
+    {"SC", ""},
+    {"HSPP", ""},
+    {"MHP", ""},
+    {"PDM", ""},
+    {"PSYD", ""},
+    {"OTHALMIC DISPENSER", ""}, //like OD
+    {"FACR", ""},
+    {"CRPN", ""},
+    {"CAP", ""},
+    {"ACT", ""},
+    //{"PA C", ""},
+    {"LDN", ""},
+    {"OCS", ""},
+    //{"PH D", ""},
+    {"HPD", ""},
+    {"OT", ""},
+    {"CDER", ""},
+    {"D C", ""}
 };
 
 std::unordered_map<std::string, std::string> title_map =
@@ -177,27 +226,33 @@ Name::get_specs(std::string& name)
     std::vector<std::string> items;
     split(name, ',', items);
 
-    //TODO: write it with a reverser iterator
-    for(int i = items.size()-1; i >= 0; i--)
+    try
     {
-        //Looking for the known specs int the specs_map
-        auto search = specs_map.find(trim(items.at(i)));
-        if(search != specs_map.end())
+        for(int i = items.size()-1; i >= 0; i--)
         {
-            this->specs.push_back(search->first);
-            //std::cout << "specs found: " << search->first << std::endl;
-        }
-        else
-        {
-            //this->specs.push_back("UNKNOWN");
-            //std::cout << "specs NOT FOUND: " << items.at(i) << std::endl;
+            std::vector<std::string> chunks;
+            split(items[i], ' ', chunks);
 
-            //To remove the found specs from the end of the name
-            name = join(items, ' ', 0, i);
-            //std::cout << "new name: " << name << std::endl;
-            break;
+            for(int j = chunks.size()-1; j >= 0; j--)
+            {
+                auto find = specs_map.find(trim(chunks.at(j)));
+                if(find != specs_map.end())
+                {
+                    this->specs.push_back(find->first);
+                }
+                else
+                {
+                    if(i == 0)
+                        name = join(chunks, ' ', 0, j);
+
+                    else
+                        name = join(items, ' ', 0, i-1);
+                    throw true;
+                }
+            }
         }
     }
+    catch (bool e) {};
 }
 
 void
