@@ -67,11 +67,12 @@ str_hash(std::string& str)
     return codes[0] + codes[1];
 }
 
-//TODO: what about INC?
+//TODO: what about INC, LLC?
 std::unordered_map<std::string, std::string> specs_map =
 {
     {"PHD", "majom"},
     {"MD", ""},
+    {"M D", ""},
     {"PA", ""},
     {"DDS", ""},
     {"CNP", ""},
@@ -92,7 +93,33 @@ std::unordered_map<std::string, std::string> specs_map =
     {"ACSW", "ACADEMY OF CERTIFIED SOCIAL WORKERS"},
     {"PA-C", "PHYSICIAN ASSISTANT CERTIFIED"},
     {"AA-C", "CERTIFIED ANESTHESIOLOGIST ASSISTANT"},
-    {"RPH", "REGISTERED PHARMACIST"}
+    {"RPH", "REGISTERED PHARMACIST"},
+    {"OTR", "REGISTERED OCCUPATIONAL THERAPIST"},
+    {"OTR/L", "OCCUPATIONAL THERAPIST"},
+    //{"JR", ""},
+    {"CLL", ""},
+    {"ANP", "ADVANCED NURSE PRACTITIONER"},
+    {"RNC", "REGISTERED NURSE CERTIFIED"},
+    {"DC", "DOCTOR OF CHIROPRACTIC"},
+    {"PAAA", ""}, //MRS ALISA A KEATS
+    {"PC", ""},
+    {"TS", ""}, //example
+    {"AUD", "AUDIOLOGIST"},
+    {"DPH", "DOCTOR OF PHARMACY"}, //PHARMACIST
+    //{"LLC", ""},
+    {"PT", "PHYSICAL THERAPIST"},
+    {"PAC", "CERTIFIED PHYSICIAN ASSISTANT"},
+    {"ARNP", "ADVANCED REGISTERED NURSE PRACTITIONER"},
+    {"SCLW", "SOCIAL WORKER"}, //LSCW mistyped?
+    {"LP", "LICENSED PSYCHOLOGIST"},
+    {"LMFT", "LICENSED MARRIAGE AND FAMILY THERAPIST"},
+    {"PA", "PHYSICIAN ASSISTANT"},
+    {"GNP", "GERONTOLOGICAL NURSE PRACTITIONER"},
+    {"CNM", "CERTIFIED NURSE MIDWIFE"},
+    {"ACNP", ""},
+    {"DMD", ""},
+    {"D C", ""},
+    {"MBA", ""}
 };
 
 std::unordered_map<std::string, std::string> title_map =
