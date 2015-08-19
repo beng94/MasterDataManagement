@@ -4,16 +4,6 @@
 #include "data.hpp"
 #include "Address.h"
 
-bool IsANumber(char cCharacter){
-	if (cCharacter >= '0' && cCharacter <= '9')
-		return true;
-	return false;
-}
-
-void ConvertStateName(std::string *spStateName){
-
-}
-
 
 CAddress::CAddress(std::string sAddressString){
 
@@ -90,23 +80,17 @@ CAddress::CAddress(std::string sAddressString){
 
 }
 
-double CAddress::IsTheSame(CAddress qOtherAddress){
-	double fProbability = 0.5;
-	if (msState != qOtherAddress.msState)
-		fProbability -= 0.25;
-	else
-		fProbability += 0.25;
-	if (msCity != qOtherAddress.msCity)
-		fProbability -= 0.2;
-	else
-		fProbability += 0.2;
-	if (msStreet != qOtherAddress.msStreet)
-		fProbability -= 0.1;
-	else
-		fProbability += 0.1;
-	if (fProbability < 0)
-		return 0;
-	if (fProbability > 1)
-		return 1;
-	return fProbability;
+int AddressBitMapMaker(CAddress& const qFirstAddress, CAddress& const qSecondAddress){
+	int iReturnValue = 0;
+	if (qFirstAddress.miZipCode == qSecondAddress.miZipCode)
+		iReturnValue += 1;
+	if (qFirstAddress.msCityHash == qSecondAddress.msCityHash)
+		iReturnValue += 2;
+	if (qFirstAddress.msStreetHash == qSecondAddress.msCityHash)
+		iReturnValue += 4;
+	if (qFirstAddress.msOtherStuffHash == qSecondAddress.msOtherStuffHash)
+		iReturnValue += 8;
+	if (qFirstAddress.miHouseNumber == qSecondAddress.miHouseNumber)
+		iReturnValue += 16;
+	return iReturnValue;
 }

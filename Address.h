@@ -4,10 +4,9 @@
 #include <string>
 #include <iostream>
 
-bool IsANumber(char cCharacter);
-void ConvertStateName(std::string *spStateName);
 
 class CAddress{
+public:
 	int miHouseNumber;
 	int miZipCode;
 	std::string msStreet;
@@ -20,11 +19,10 @@ class CAddress{
 	std::string msOtherStuffHash;
 	bool mbIsAPOBox;
 
-public:
 
 	CAddress(std::string sAddressString);
-
-	double IsTheSame(CAddress qOtherAddress);
 };
+
+int AddressBitMapMaker(const CAddress& qFirstAddress, const CAddress& qSecondAddress);
 
 #endif
