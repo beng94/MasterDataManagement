@@ -3,7 +3,6 @@
 
 #include <string>
 #include <iostream>
-#include "data.hpp"
 
 bool IsANumber(char cCharacter);
 void ConvertStateName(std::string *spStateName);
@@ -18,6 +17,7 @@ class CAddress{
 	std::string msOtherStuff;
 	std::string msStreetHash;
 	std::string msCityHash;
+	std::string msOtherStuffHash;
 	bool mbIsAPOBox;
 
 public:

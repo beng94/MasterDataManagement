@@ -32,6 +32,11 @@ CAddress::CAddress(std::string sAddressString){
 	if (saStreetName[0] == "PO"){
 		mbIsAPOBox = true;
 		miHouseNumber = boost::lexical_cast<int>(saStreetName.back());
+		std::vector<std::string> saSecondaryStreetName;
+		boost::trim(saFields[1]);
+		split(saFields[0], ' ', saSecondaryStreetName);
+		for (int i = 0; i < saSecondaryStreetName.size(); i++)
+			msStreet += saSecondaryStreetName[i];
 	}
 	else{
 		mbIsAPOBox = false;
@@ -59,8 +64,15 @@ CAddress::CAddress(std::string sAddressString){
 
 	/// Parses the City
 	msCity = trim(saFields[iFirstFieldsSize - 3]);
-	if (iFirstFieldsSize > 4){
-		for (int i = 1; i < iFirstFieldsSize - 3; i++){
+	if (!mbIsAPOBox){
+		if (iFirstFieldsSize > 4){
+			for (int i = 1; i < iFirstFieldsSize - 3; i++){
+				msOtherStuff += saFields[i];
+			}
+		}
+	}
+	else if (iFirstFieldsSize > 5){
+		for (int i = 2; i < iFirstFieldsSize - 3; i++){
 			msOtherStuff += saFields[i];
 		}
 	}
@@ -69,6 +81,7 @@ CAddress::CAddress(std::string sAddressString){
 	/// Creates the hashes
 	msCityHash = str_hash(msCity);
 	msStreetHash = str_hash(msStreet);
+	msOtherStuffHash = str_hash(msOtherStuff);
 
 	/// Debug
 	std::cout << miHouseNumber << std::endl << mbIsAPOBox << std::endl << msStreet << std::endl;
