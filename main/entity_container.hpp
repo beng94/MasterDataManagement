@@ -1,3 +1,6 @@
+#ifndef ENTITY_CONT_H
+#define ENTITY_CONT_H
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -16,3 +19,5 @@ class Entity_container {
                        {}
     bool calculate_and_save_results(const std::string& result_filename);
 };
+
+#endif

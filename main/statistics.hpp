@@ -1,3 +1,6 @@
+#ifndef STATISTICS_H
+#define STATISTICS_H
+
 #include <vector>
 #include <string>
 #include "entity_container.hpp"
@@ -21,3 +24,4 @@ class Statistics {
     const std::vector<double>& get_oddsVector() { return oddsVector; }
 };
 
+#endif

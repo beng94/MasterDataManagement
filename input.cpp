@@ -2,7 +2,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include "data.hpp"
+#include "entity.hpp"
 #include "csvparser.h"
 #include "Address.h"
 

@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <fstream>
 
-#include "data.hpp"
+#include "entity.hpp"
 #include "double_metaphone.h"
 
 std::string
