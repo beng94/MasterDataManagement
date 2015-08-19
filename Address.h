@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 
+bool IsANumber(char cCharacter);
 
 class CAddress{
 public:

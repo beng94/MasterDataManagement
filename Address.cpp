@@ -4,16 +4,23 @@
 #include "data.hpp"
 #include "Address.h"
 
+bool IsANumber(char cCharacter){
+	if (cCharacter >= '0' && cCharacter <= '9')
+		return true;
+	return false;
+}
+
 
 CAddress::CAddress(std::string sAddressString){
-
+	miHouseNumber = 0;
+	miZipCode = 0;
 	std::vector<std::string> saFields;
 	split(sAddressString, ',', saFields);
 	int iFirstFieldsSize = saFields.size();
-	if (iFirstFieldsSize > 4){
+	/*if (iFirstFieldsSize > 4){
 		for (int i = 0; i < iFirstFieldsSize; i++)
 			std::cout << saFields[i] << std::endl;
-	}
+	}*/
 	///< Separates based on commas, checks if the address is irregular
 
 	std::vector<std::string> saStreetName;
@@ -21,7 +28,10 @@ CAddress::CAddress(std::string sAddressString){
 	split(saFields[0], ' ', saStreetName);
 	if (saStreetName[0] == "PO"){
 		mbIsAPOBox = true;
-		miHouseNumber = boost::lexical_cast<int>(saStreetName.back());
+		if (IsANumber(saStreetName.back()[0]))
+			miHouseNumber = boost::lexical_cast<int>(saStreetName.back());
+		else
+			msOtherStuff += saStreetName.back();
 		std::vector<std::string> saSecondaryStreetName;
 		boost::trim(saFields[1]);
 		split(saFields[0], ' ', saSecondaryStreetName);
@@ -30,7 +40,10 @@ CAddress::CAddress(std::string sAddressString){
 	}
 	else{
 		mbIsAPOBox = false;
-		miHouseNumber = boost::lexical_cast<int>(saStreetName.front());
+		if (IsANumber(saStreetName.front()[0]))
+			miHouseNumber = boost::lexical_cast<int>(saStreetName.front());
+		else
+			msOtherStuff += saStreetName.front();
 		for (int i = 1; i < saStreetName.size(); i++)
 			msStreet += saStreetName[i];
 	}
@@ -46,10 +59,20 @@ CAddress::CAddress(std::string sAddressString){
 	std::vector<std::string> saZipCode;
 	boost::trim(saStateAndZipCode[1]);
 	split(saStateAndZipCode[1], '-', saZipCode);
-	if (saZipCode.size() > 1)
-		miZipCode = boost::lexical_cast<int>(saZipCode[0]) * 10000 + boost::lexical_cast<int>(saZipCode[1]);
-	else
-		miZipCode = boost::lexical_cast<int>(saZipCode[0]);
+	if (saZipCode.size() > 1){
+		if (IsANumber(saZipCode[0][0]) && IsANumber(saZipCode[1][0]))
+			miZipCode = boost::lexical_cast<int>(saZipCode[0]) * 10000 + boost::lexical_cast<int>(saZipCode[1]);
+		else{
+			msOtherStuff += saZipCode[0];
+			msOtherStuff += saZipCode[1];
+		}
+	}
+	else{
+		if (IsANumber(saZipCode[0][0]))
+			miZipCode = boost::lexical_cast<int>(saZipCode[0]);
+		else
+			msOtherStuff += saZipCode[0];
+	}
 	///< Parses the zip code based on 5 and 9 digit variations
 
 	/// Parses the City
