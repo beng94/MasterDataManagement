@@ -1,5 +1,13 @@
 #include "statistics.hpp"
 
+#include <iostream>
+#include <stdexcept>
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
+
+#include "../csvparser.h"
+#include "../string_handle.hpp"
+
 static char** parse_line(CsvParser *parser)
 {
     CsvRow *row = CsvParser_getRow(parser);

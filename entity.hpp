@@ -3,15 +3,7 @@
 
 #include "name.hpp"
 #include "Address.h"
-
-class Taxonomies
-{
-public:
-    /*write members here*/
-    //should have an array of taxonomies
-
-    Taxonomies(std::string tax);
-};
+#include "tax.hpp"
 
 class Entity
 {
@@ -21,7 +13,7 @@ public:
     CAddress address;
     Taxonomies taxonomies;
 
-    Entity(int id, Name name, CAddress addr, Taxonomies tax) :
+    Entity(int id, std::string name, std::string addr, std::string tax) :
            id{id}, name{name}, address{addr}, taxonomies{tax}
     {}
 };

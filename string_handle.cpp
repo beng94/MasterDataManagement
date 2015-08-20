@@ -1,5 +1,9 @@
 #include "string_handle.hpp"
 
+#include <boost/algorithm/string.hpp>
+#include <algorithm>
+#include <sstream>
+
 std::string
 trim(std::string str)
 {

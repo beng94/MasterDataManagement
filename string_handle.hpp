@@ -3,9 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <boost/algorithm/string.hpp>
-#include <algorithm>
-#include <sstream>
 
 #include "double_metaphone.h"
 

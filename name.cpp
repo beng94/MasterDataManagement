@@ -1,5 +1,13 @@
 #include "name.hpp"
 
+#include <unordered_map>
+#include <sstream>
+#include <fstream>
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
+
+#include "string_handle.hpp"
+
 //TODO: what about INC, LLC?
 std::unordered_map<std::string, std::string> specs_map =
 {

@@ -1,5 +1,13 @@
 #include "Address.h"
 
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
+
+#include "string_handle.hpp"
+
 bool IsANumber(char cCharacter){
 	return cCharacter >= '0' && cCharacter <= '9';
 }
