@@ -46,10 +46,6 @@ CAddress::CAddress(std::string sAddressString){
 	std::vector<std::string> saFields;
 	split(sAddressString, ',', saFields);
 	int iFirstFieldsSize = saFields.size();
-	/*if (iFirstFieldsSize > 4){
-		for (int i = 0; i < iFirstFieldsSize; i++)
-			std::cout << saFields[i] << std::endl;
-	}*/
 	///< Separates based on commas, checks if the address is irregular
 
 	std::vector<std::string> saStreetName;
@@ -142,11 +138,18 @@ int AddressBitMapMaker(const CAddress& qFirstAddress, const CAddress& qSecondAdd
 		iReturnValue += 1;
 	if (qFirstAddress.msCityHash == qSecondAddress.msCityHash)
 		iReturnValue += 2;
-	if (qFirstAddress.msStreetHash == qSecondAddress.msStreetHash)
+	double fStreetMatch = StringCheck(qFirstAddress.msStreet, qSecondAddress.msStreet);
+	if (fStreetMatch < 0.25)
+		iReturnValue += 0;
+	if (fStreetMatch >= 0.25 && fStreetMatch < 0.5)
 		iReturnValue += 4;
-	if (qFirstAddress.msOtherStuffHash == qSecondAddress.msOtherStuffHash)
+	if (fStreetMatch >= 0.5 && fStreetMatch < 0.75)
 		iReturnValue += 8;
-	if (qFirstAddress.miHouseNumber == qSecondAddress.miHouseNumber)
+	if (fStreetMatch >= 0.75)
+		iReturnValue += 12;
+	if (StringCheck(qFirstAddress.msOtherStuff, qSecondAddress.msOtherStuff) > 0.75)
 		iReturnValue += 16;
+	if (qFirstAddress.miHouseNumber == qSecondAddress.miHouseNumber)
+		iReturnValue += 32;
 	return iReturnValue;
 }
