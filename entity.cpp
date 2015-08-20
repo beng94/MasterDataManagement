@@ -168,7 +168,12 @@ std::unordered_map<std::string, std::string> specs_map =
     {"HPD", ""},
     {"OT", ""},
     {"CDER", ""},
-    {"D C", ""}
+    {"D C", ""},
+    {"MSN", ""},
+    {"RN", ""},
+    {"MTD", ""},
+    {"MPH", ""},
+    {"CSCS", ""},
 };
 
 std::unordered_map<std::string, std::string> title_map =
