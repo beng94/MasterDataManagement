@@ -18,4 +18,6 @@ public:
     {}
 };
 
+int entities_cmp(Entity&, Entity&);
+
 #endif
