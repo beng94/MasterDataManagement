@@ -252,3 +252,55 @@ Name::Name(std::string name)
 
     this->get_nickname(name);
 }
+
+bool find_abbrev(std::string& c, std::vector<std::string>& rhs_chunks)
+{
+    for(auto str: rhs_chunks)
+        if(str[0] == c[0]) return true;
+
+    return false;
+}
+
+bool contains_abbrev(std::vector<std::string>& lhs_chunks,
+                            std::vector<std::string>& rhs_chunks)
+{
+    for(auto str: lhs_chunks)
+    {
+        if(str.length() == 1)
+        {
+            if(find_abbrev(str, rhs_chunks)) return true;
+        }
+    }
+
+    for(auto str: rhs_chunks)
+    {
+         if(str.length() == 1)
+         {
+            if(find_abbrev(str, lhs_chunks)) return true;
+         }
+    }
+
+    return false;
+}
+
+int Name::name_cmp(Name& rhs_name)
+{
+    std::vector<std::string> lhs_chunks;
+    std::vector<std::string> rhs_chunks;
+    split(this->name, ' ', lhs_chunks);
+    split(rhs_name.name, ' ', rhs_chunks);
+
+    bool abbrev = contains_abbrev(lhs_chunks, rhs_chunks);
+    double name_cmp = StringCheck(this->name, rhs_name.name);
+
+    if(contains_abbrev(lhs_chunks, rhs_chunks))
+    {
+         name_cmp *= 0.8;
+         name_cmp += 0.2;
+    }
+
+    if(name_cmp >= 0.75) return 0b11;
+    else if(name_cmp >= 0.5 && name_cmp < 0.75) return 0b10;
+    else if(name_cmp >= 0.25 && name_cmp < 0.5) return 0b01;
+    else return 0b00;
+}
