@@ -23,7 +23,7 @@ class Statistics {
     void read_training_data(std::vector<Entity>&);
     bool calculate_oddsVector();
     bool calculate_and_save_results(const std::string& testing_data_filename,
-                                            const std::string& result_filename);
+                                    const std::string& result_filename);
 
     const std::vector<double>& get_oddsVector() { return oddsVector; }
 };

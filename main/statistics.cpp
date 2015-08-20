@@ -26,13 +26,17 @@ void Statistics::read_training_data(std::vector<Entity>& vec)
 
             int id = boost::lexical_cast<int>(rowFields[0]);
             Name name(trim(rowFields[1]));
-            //CAddress address(trim(rowFields[2]));
-            //Taxonomies taxonomies(trim(rowFields[3]));
-            //Entity entity(id, name, address, taxonomies);
+            CAddress address(trim(rowFields[2]));
+            Taxonomies taxonomies(trim(rowFields[3]));
+            Entity entity(id, name, address, taxonomies);
 
-            //vec.push_back(entity);
+            vec.push_back(entity);
         }
-        catch (std::out_of_range& oor) { break; }
+        catch (std::out_of_range& oor) 
+          {
+            std::cerr << "statistics.cpp: Exception thrown near initializing Entity fields" << std::endl;
+            break; 
+          }
     }
     CsvParser_destroy(parser);
 }
