@@ -1,6 +1,5 @@
 #include <iostream>
 #include "statistics.hpp"
-#include "entity_container.hpp"
 
 const std::string training_data_filename = "training_data.csv";
 const std::string ground_truth_filename = "training_ground_truth.csv";
@@ -16,8 +15,7 @@ int main()
       std::cerr << "Global Error: calculating oddsVector was unsuccessful" << std::endl;
       return 1;
     }
-  Entity_container ents(stats.get_oddsVector(), testing_data_filename);
-  if (! ents.calculate_and_save_results(result_filename))
+  if (!stats.calculate_and_save_results(testing_data.csv, result_filename))
     { 
       std::cerr << "Global Error: calculating results was unsuccessful" << std::endl;
       return 2;

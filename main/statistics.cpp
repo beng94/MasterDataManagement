@@ -38,11 +38,17 @@ void Statistics::read_training_data(std::vector<Entity>& vec)
 }
 
 bool Statistics::calculate_oddsVector()
-  {
+{
     //TODO: LOTS OF FUMCTIONS ABOVE
     std::vector<Entity> entities;
     entities.reserve(450000);
     read_training_data(entities);
 
     return true;
-  }
+}
+
+bool Statistics::calculate_and_save_results(const std::string& result_filename)
+{
+    //TODO: implement functions
+    return 0; 
+}

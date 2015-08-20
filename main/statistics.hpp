@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <string>
-#include "entity_container.hpp"
 
 const int STASH_COUNT= 12;
 
