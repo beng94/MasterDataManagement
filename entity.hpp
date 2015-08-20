@@ -5,7 +5,6 @@
 
 //TODO: write a program to get the data out from the ground_truth file
 
-std::string trim(char *);
 std::string trim(std::string str);
 std::string join(std::vector<std::string>&, char, int , int);
 void char_remove(std::string&, std::string);

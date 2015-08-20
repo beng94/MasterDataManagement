@@ -9,19 +9,25 @@
 #include "double_metaphone.h"
 
 std::string
-trim(char *s)
-{
-    std::string str(s);
-    boost::trim(str);
-
-    return str;
-}
-
-std::string
 trim(std::string str)
 {
-    boost::trim(str);
-    return str;
+    int cnt_beg = 0;
+    int cnt_end = 0;
+
+    for(auto c: str)
+        if(c == ' ' || c == ',')
+            cnt_beg++;
+        else
+            break;
+
+    for(int i = str.length(); i >= 0; i--)
+    {
+         if(str[i] == ' ' || str[i] == ',')
+             cnt_end++;
+         break;
+    }
+
+    return str.substr(cnt_beg, str.length() - cnt_beg - cnt_end);
 }
 
 std::string

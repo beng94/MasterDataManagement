@@ -25,9 +25,9 @@ void Statistics::read_training_data(std::vector<Entity>& vec)
             char **rowFields = parse_line(parser);
 
             int id = boost::lexical_cast<int>(rowFields[0]);
-            Name name(trim(rowFields[1]));
-            CAddress address(trim(rowFields[2]));
-            Taxonomies taxonomies(trim(rowFields[3]));
+            Name name(trim(std::string(rowFields[1])));
+            CAddress address(std::string(trim(rowFields[2])));
+            Taxonomies taxonomies(std::string(trim(rowFields[3])));
             Entity entity(id, name, address, taxonomies);
 
             vec.push_back(entity);
