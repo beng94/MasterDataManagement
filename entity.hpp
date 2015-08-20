@@ -50,3 +50,5 @@ public:
            id{id}, name{name}, address{addr}, taxonomies{tax}
     {}
 };
+
+int entities_cmp(Entity&, Entity&);

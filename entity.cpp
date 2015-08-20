@@ -331,3 +331,8 @@ Taxonomies::Taxonomies(std::string tax)
     //TODO
     //std::cout << tax << std::endl;
 }
+
+int entities_cmp(Entity& ent_a, Entity& ent_b)
+{
+
+}
