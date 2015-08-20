@@ -1,9 +1,4 @@
-#include <stdexcept>
-#include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string.hpp>
-
 #include "statistics.hpp"
-#include "../csvparser.h"
 
 static char** parse_line(CsvParser *parser)
 {
@@ -24,11 +19,10 @@ void Statistics::read_training_data(std::vector<Entity>& vec)
         {
             char **rowFields = parse_line(parser);
 
-            int id = boost::lexical_cast<int>(rowFields[0]);
-            Name name(trim(std::string(rowFields[1])));
-            CAddress address(std::string(trim(rowFields[2])));
-            Taxonomies taxonomies(std::string(trim(rowFields[3])));
-            Entity entity(id, name, address, taxonomies);
+            Entity entity(boost::lexical_cast<int>(rowFields[0]),
+                          trim(std::string(rowFields[1])),
+                          std::string(trim(rowFields[2])),
+                          std::string(trim(rowFields[3])));
 
             vec.push_back(entity);
         }
@@ -57,3 +51,4 @@ bool Statistics::calculate_and_save_results(const std::string& testing_data_file
     //TODO: implement functions
     return 0; 
 }
+

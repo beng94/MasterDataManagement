@@ -1,9 +1,14 @@
-#ifndef STATISTICS_H
-#define STATISTICS_H
+#ifndef STATISTICS_HPP
+#define STATISTICS_HPP
 
+#include <stdexcept>
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
 #include <vector>
 #include <string>
 #include "../entity.hpp"
+#include "../csvparser.h"
+#include "../string_handle.hpp"
 
 const int STASH_COUNT= 12;
 

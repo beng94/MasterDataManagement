@@ -3,10 +3,14 @@
 
 #include <string>
 #include <iostream>
+#include <algorithm>
+#include <vector>
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
+
+#include "string_handle.hpp"
 
 bool IsANumber(char cCharacter);
-double StringCheck(const std::string& sFirstString, const std::string& sSecondString);
-double WordCheck(const std::string& sFirstWord, const std::string& sSecondWord);
 double ZipCodeCheck(const std::string& sFirstZip, const std::string& sSecondZip);
 
 class CAddress{
