@@ -25,6 +25,7 @@ double StringCheck(const std::string& sFirstString, const std::string& sSecondSt
 	split(sFirstString, ' ', saFirstString);
 	split(sSecondString, ' ', saSecondString);
 	std::vector<double> faSimilarities;
+
 	for (auto str_a : saFirstString){
 		double fMaxSimilarity = 0.0;
 		for (auto str_b : saSecondString){
@@ -34,6 +35,7 @@ double StringCheck(const std::string& sFirstString, const std::string& sSecondSt
 		}
 		faSimilarities.push_back(fMaxSimilarity);
 	}
+
 	double fProbabilitySum = 0.0;
 	for (int i = 0; i < saFirstString.size(); i++)
 		fProbabilitySum += faSimilarities.at(i) * saFirstString.at(i).length();
@@ -53,7 +55,7 @@ CAddress::CAddress(std::string sAddressString){
 	split(saFields[0], ' ', saStreetName);
 	if (saStreetName[0] == "PO"){
 		mbIsAPOBox = true;
-		if (IsANumber(saStreetName.back()[0]))
+		if (IsANumber(saStreetName.back()[0]) && IsANumber(saStreetName.back()[saStreetName.back().length()]))
 			miHouseNumber = boost::lexical_cast<int>(saStreetName.back());
 		else
 			msOtherStuff += saStreetName.back();
@@ -66,7 +68,7 @@ CAddress::CAddress(std::string sAddressString){
 	}
 	else{
 		mbIsAPOBox = false;
-		if (IsANumber(saStreetName.front()[0]))
+		if (IsANumber(saStreetName.front()[0]) && IsANumber(saStreetName.front()[saStreetName.front().length()]))
 			miHouseNumber = boost::lexical_cast<int>(saStreetName.front());
 		else
 			msOtherStuff += saStreetName.front();
@@ -133,19 +135,19 @@ CAddress::CAddress(std::string sAddressString){
 }
 
 int AddressBitMapMaker(const CAddress& qFirstAddress, const CAddress& qSecondAddress){
+	double fStreetMatch = StringCheck(qFirstAddress.msStreet, qSecondAddress.msStreet);
 	int iReturnValue = 0;
 	if (qFirstAddress.miZipCode == qSecondAddress.miZipCode)
 		iReturnValue += 1;
 	if (qFirstAddress.msCityHash == qSecondAddress.msCityHash)
 		iReturnValue += 2;
-	double fStreetMatch = StringCheck(qFirstAddress.msStreet, qSecondAddress.msStreet);
 	if (fStreetMatch < 0.25)
 		iReturnValue += 0;
-	if (fStreetMatch >= 0.25 && fStreetMatch < 0.5)
+	else if (fStreetMatch >= 0.25 && fStreetMatch < 0.5)
 		iReturnValue += 4;
-	if (fStreetMatch >= 0.5 && fStreetMatch < 0.75)
+	else if (fStreetMatch >= 0.5 && fStreetMatch < 0.75)
 		iReturnValue += 8;
-	if (fStreetMatch >= 0.75)
+	else
 		iReturnValue += 12;
 	if (StringCheck(qFirstAddress.msOtherStuff, qSecondAddress.msOtherStuff) > 0.75)
 		iReturnValue += 16;
