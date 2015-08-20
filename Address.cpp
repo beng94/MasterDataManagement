@@ -9,7 +9,36 @@ bool IsANumber(char cCharacter){
 	return cCharacter >= '0' && cCharacter <= '9';
 }
 
+double WordCheck(const std::string& sFirstWord, const std::string& sSecondWord){
+	int iMinSize = std::min(sFirstWord.length(), sSecondWord.length());
+	int iMaxSize = std::max(sFirstWord.length(), sSecondWord.length());
+	double fReturnValue = 0;
+	for (int i = 0; i < iMinSize; i++)
+		if (sFirstWord[i] == sSecondWord[i])
+			fReturnValue++;
+	return fReturnValue / iMaxSize;
+}
 
+
+double StringCheck(const std::string& sFirstString, const std::string& sSecondString){
+	std::vector<std::string> saFirstString, saSecondString;
+	split(sFirstString, ' ', saFirstString);
+	split(sSecondString, ' ', saSecondString);
+	std::vector<double> faSimilarities;
+	for (auto str_a : saFirstString){
+		double fMaxSimilarity = 0.0;
+		for (auto str_b : saSecondString){
+			double fCompare = WordCheck(str_a, str_b);
+			if (fCompare > fMaxSimilarity)
+				fMaxSimilarity = fCompare;
+		}
+		faSimilarities.push_back(fMaxSimilarity);
+	}
+	double fProbabilitySum = 0.0;
+	for (int i = 0; i < saFirstString.size(); i++)
+		fProbabilitySum += faSimilarities.at(i) * saFirstString.at(i).length();
+	return fProbabilitySum / (sFirstString.length() - saFirstString.size() + 1);
+}
 
 CAddress::CAddress(std::string sAddressString){
 	miHouseNumber = 0;
@@ -17,6 +46,11 @@ CAddress::CAddress(std::string sAddressString){
 	std::vector<std::string> saFields;
 	split(sAddressString, ',', saFields);
 	int iFirstFieldsSize = saFields.size();
+	/*if (iFirstFieldsSize > 4){
+		for (int i = 0; i < iFirstFieldsSize; i++)
+			std::cout << saFields[i] << std::endl;
+	}*/
+	///< Separates based on commas, checks if the address is irregular
 
 	std::vector<std::string> saStreetName;
 	boost::trim(saFields[0]);
