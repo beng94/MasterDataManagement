@@ -173,10 +173,12 @@ std::unordered_map<std::string, std::string> specs_map =
 
 std::unordered_map<std::string, std::string> title_map =
 {
-    {"DR", ""},
-    {"MR", ""},
-    {"MRS", ""},
-    {"MS", ""}
+    {"DR", "DR"},
+    {"RD", "DR"},
+    {"MR", "MR"},
+    {"MRS", "MRS"},
+    {"MS", "MS"},
+    {"JR", "JR"}
 };
 
 std::unordered_map<std::string, std::vector<std::string>> nicknames_map;
@@ -265,14 +267,19 @@ Name::get_title(std::string& name)
     auto search = title_map.find(trim(chunks.front()));
     if(search != title_map.end())
     {
-        this->title = search->first;
-        //std::cout << "title found: " << search->first << std::endl;
+        this->title.push_back(search->second);
+        name = join(chunks, ' ', 1, chunks.size()-1);
     }
-    else
-        //std::cout << "title NOT FOUND" << std::endl;
 
-    name = join(chunks, ' ', 1, chunks.size()-1);
-    //std::cout << "new name: " << name << std::endl;
+    search = title_map.find(trim(chunks.back()));
+    if(search != title_map.end())
+    {
+        this->title.push_back(search->second);
+
+        std::vector<std::string> new_chunks;
+        split(name, ' ', new_chunks);
+        name = join(new_chunks, ' ', 0, new_chunks.size()-2);
+    }
 }
 
 void
