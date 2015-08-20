@@ -3,12 +3,12 @@
 #include <boost/algorithm/string.hpp>
 #include "data.hpp"
 #include "Address.h"
+#include <algorithm>
 
 bool IsANumber(char cCharacter){
-	if (cCharacter >= '0' && cCharacter <= '9')
-		return true;
-	return false;
+	return cCharacter >= '0' && cCharacter <= '9';
 }
+
 
 
 CAddress::CAddress(std::string sAddressString){
@@ -17,11 +17,6 @@ CAddress::CAddress(std::string sAddressString){
 	std::vector<std::string> saFields;
 	split(sAddressString, ',', saFields);
 	int iFirstFieldsSize = saFields.size();
-	/*if (iFirstFieldsSize > 4){
-		for (int i = 0; i < iFirstFieldsSize; i++)
-			std::cout << saFields[i] << std::endl;
-	}*/
-	///< Separates based on commas, checks if the address is irregular
 
 	std::vector<std::string> saStreetName;
 	boost::trim(saFields[0]);
@@ -32,11 +27,12 @@ CAddress::CAddress(std::string sAddressString){
 			miHouseNumber = boost::lexical_cast<int>(saStreetName.back());
 		else
 			msOtherStuff += saStreetName.back();
+		// PO Box field is separated
 		std::vector<std::string> saSecondaryStreetName;
 		boost::trim(saFields[1]);
-		split(saFields[0], ' ', saSecondaryStreetName);
+		split(saFields[1], ' ', saSecondaryStreetName);
 		for (int i = 0; i < saSecondaryStreetName.size(); i++)
-			msStreet += saSecondaryStreetName[i];
+			msStreet += saSecondaryStreetName[i] + ' ';
 	}
 	else{
 		mbIsAPOBox = false;
@@ -45,8 +41,9 @@ CAddress::CAddress(std::string sAddressString){
 		else
 			msOtherStuff += saStreetName.front();
 		for (int i = 1; i < saStreetName.size(); i++)
-			msStreet += saStreetName[i];
+			msStreet += saStreetName[i] + ' ';
 	}
+	boost::trim(msStreet);
 	///< Takes the first field and parses it accordingly
 
 	msCountry = trim(saFields[iFirstFieldsSize - 1]);
@@ -92,6 +89,8 @@ CAddress::CAddress(std::string sAddressString){
 	///< Parses any and all remaining non-standard fields
 
 	/// Creates the hashes
+	char_remove(msCity, ".,");
+	char_remove(msStreet, ".,");
 	msCityHash = str_hash(msCity);
 	msStreetHash = str_hash(msStreet);
 	msOtherStuffHash = str_hash(msOtherStuff);
@@ -103,13 +102,13 @@ CAddress::CAddress(std::string sAddressString){
 
 }
 
-int AddressBitMapMaker(CAddress& const qFirstAddress, CAddress& const qSecondAddress){
+int AddressBitMapMaker(const CAddress& qFirstAddress, const CAddress& qSecondAddress){
 	int iReturnValue = 0;
 	if (qFirstAddress.miZipCode == qSecondAddress.miZipCode)
 		iReturnValue += 1;
 	if (qFirstAddress.msCityHash == qSecondAddress.msCityHash)
 		iReturnValue += 2;
-	if (qFirstAddress.msStreetHash == qSecondAddress.msCityHash)
+	if (qFirstAddress.msStreetHash == qSecondAddress.msStreetHash)
 		iReturnValue += 4;
 	if (qFirstAddress.msOtherStuffHash == qSecondAddress.msOtherStuffHash)
 		iReturnValue += 8;

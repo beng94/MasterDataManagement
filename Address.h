@@ -10,15 +10,18 @@ class CAddress{
 public:
 	int miHouseNumber;
 	int miZipCode;
+
+	bool mbIsAPOBox;
+
 	std::string msStreet;
 	std::string msCity;
 	std::string msState;
 	std::string msCountry;
 	std::string msOtherStuff;
+
 	std::string msStreetHash;
 	std::string msCityHash;
 	std::string msOtherStuffHash;
-	bool mbIsAPOBox;
 
 
 	CAddress(std::string sAddressString);
