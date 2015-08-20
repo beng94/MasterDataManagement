@@ -47,7 +47,8 @@ bool Statistics::calculate_oddsVector()
     return true;
 }
 
-bool Statistics::calculate_and_save_results(const std::string& result_filename)
+bool Statistics::calculate_and_save_results(const std::string& testing_data_filename, 
+                                            const std::string& result_filename)
 {
     //TODO: implement functions
     return 0; 

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include "../entity.hpp"
 
 const int STASH_COUNT= 12;
 
@@ -11,7 +12,6 @@ class Statistics {
     const std::string training_data_filename;
     const std::string ground_truth_filename;
     std::vector<double> oddsVector;
-    Entity_container* training_ents;  //This will be handled with dinamic allocation
   public:
     Statistics(const std::string& training_data_filename,
                const std::string& ground_truth_filename)
@@ -22,6 +22,9 @@ class Statistics {
 
     void read_training_data(std::vector<Entity>&);
     bool calculate_oddsVector();
+    bool calculate_and_save_results(const std::string& testing_data_filename,
+                                            const std::string& result_filename);
+
     const std::vector<double>& get_oddsVector() { return oddsVector; }
 };
 

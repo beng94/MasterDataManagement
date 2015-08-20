@@ -15,7 +15,7 @@ int main()
       std::cerr << "Global Error: calculating oddsVector was unsuccessful" << std::endl;
       return 1;
     }
-  if (!stats.calculate_and_save_results(testing_data.csv, result_filename))
+  if (!stats.calculate_and_save_results(testing_data_filename, result_filename))
     { 
       std::cerr << "Global Error: calculating results was unsuccessful" << std::endl;
       return 2;
