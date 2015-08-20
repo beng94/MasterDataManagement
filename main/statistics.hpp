@@ -20,6 +20,8 @@ class Statistics {
                  ground_truth_filename(ground_truth_filename),
                  oddsVector(STASH_COUNT,0.5)
                  {}
+
+    void read_training_data(std::vector<Entity>&);
     bool calculate_oddsVector();
     const std::vector<double>& get_oddsVector() { return oddsVector; }
 };
