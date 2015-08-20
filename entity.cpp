@@ -233,7 +233,7 @@ Name::get_specs(std::string& name)
         for(int i = items.size()-1; i >= 0; i--)
         {
             std::vector<std::string> chunks;
-            split(items[i], ' ', chunks);
+            split(trim(items[i]), ' ', chunks);
 
             for(int j = chunks.size()-1; j >= 0; j--)
             {
