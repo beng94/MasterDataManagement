@@ -42,9 +42,18 @@ double StringCheck(const std::string& sFirstString, const std::string& sSecondSt
 	return fProbabilitySum / (sFirstString.length() - saFirstString.size() + 1);
 }
 
+double ZipCodeCheck(const std::string& sFirstZip, const std::string& sSecondZip){
+	if (sFirstZip == sSecondZip)
+		return 1.0;
+	if (sFirstZip.length() > sSecondZip.length())
+		return StringCheck(sFirstZip.substr(0, 5), sSecondZip);
+	if (sFirstZip.length() < sSecondZip.length())
+		return StringCheck(sFirstZip, sSecondZip.substr(0, 5));
+	return StringCheck(sFirstZip, sSecondZip);
+}
+
 CAddress::CAddress(std::string sAddressString){
-	miHouseNumber = 0;
-	miZipCode = 0;
+	sAddressString = trim(sAddressString);
 	std::vector<std::string> saFields;
 	split(sAddressString, ',', saFields);
 	int iFirstFieldsSize = saFields.size();
@@ -55,27 +64,18 @@ CAddress::CAddress(std::string sAddressString){
 	split(saFields[0], ' ', saStreetName);
 	if (saStreetName[0] == "PO"){
 		mbIsAPOBox = true;
-		if (IsANumber(saStreetName.back()[0]) && IsANumber(saStreetName.back()[saStreetName.back().length()]))
-			miHouseNumber = boost::lexical_cast<int>(saStreetName.back());
-		else
-			msOtherStuff += saStreetName.back();
+		msHouseNumber = saStreetName.back();
 		// PO Box field is separated
 		std::vector<std::string> saSecondaryStreetName;
 		boost::trim(saFields[1]);
 		split(saFields[1], ' ', saSecondaryStreetName);
-		for (int i = 0; i < saSecondaryStreetName.size(); i++)
-			msStreet += saSecondaryStreetName[i] + ' ';
+		msStreet = join(saSecondaryStreetName, ' ', 0, saSecondaryStreetName.size() - 1);
 	}
 	else{
 		mbIsAPOBox = false;
-		if (IsANumber(saStreetName.front()[0]) && IsANumber(saStreetName.front()[saStreetName.front().length()]))
-			miHouseNumber = boost::lexical_cast<int>(saStreetName.front());
-		else
-			msOtherStuff += saStreetName.front();
-		for (int i = 1; i < saStreetName.size(); i++)
-			msStreet += saStreetName[i] + ' ';
+		msHouseNumber = saStreetName.front();
+		msStreet = join(saStreetName, ' ', 0, saStreetName.size() - 1);
 	}
-	boost::trim(msStreet);
 	///< Takes the first field and parses it accordingly
 
 	msCountry = trim(saFields[iFirstFieldsSize - 1]);
@@ -89,18 +89,10 @@ CAddress::CAddress(std::string sAddressString){
 	boost::trim(saStateAndZipCode[1]);
 	split(saStateAndZipCode[1], '-', saZipCode);
 	if (saZipCode.size() > 1){
-		if (IsANumber(saZipCode[0][0]) && IsANumber(saZipCode[1][0]))
-			miZipCode = boost::lexical_cast<int>(saZipCode[0]) * 10000 + boost::lexical_cast<int>(saZipCode[1]);
-		else{
-			msOtherStuff += saZipCode[0];
-			msOtherStuff += saZipCode[1];
-		}
+		msZipCode = saZipCode[0] + saZipCode[1];
 	}
 	else{
-		if (IsANumber(saZipCode[0][0]))
-			miZipCode = boost::lexical_cast<int>(saZipCode[0]);
-		else
-			msOtherStuff += saZipCode[0];
+		msZipCode = saZipCode[0];
 	}
 	///< Parses the zip code based on 5 and 9 digit variations
 
@@ -128,16 +120,16 @@ CAddress::CAddress(std::string sAddressString){
 	msOtherStuffHash = str_hash(msOtherStuff);
 
 	/// Debug
-	std::cout << miHouseNumber << std::endl << mbIsAPOBox << std::endl << msStreet << std::endl;
-	std::cout << msCity << std::endl << msState << std::endl << miZipCode << std::endl << msCountry << std::endl;
-	std::cout << "Other things:" << std::endl << msOtherStuff << std::endl;
+	//std::cout << msHouseNumber << std::endl << mbIsAPOBox << std::endl << msStreet << std::endl;
+	//std::cout << msCity << std::endl << msState << std::endl << msZipCode << std::endl << msCountry << std::endl;
+	//std::cout << "Other things:" << std::endl << msOtherStuff << std::endl;
 
 }
 
 int AddressBitMapMaker(const CAddress& qFirstAddress, const CAddress& qSecondAddress){
 	double fStreetMatch = StringCheck(qFirstAddress.msStreet, qSecondAddress.msStreet);
 	int iReturnValue = 0;
-	if (qFirstAddress.miZipCode == qSecondAddress.miZipCode)
+	if (ZipCodeCheck(qFirstAddress.msZipCode, qSecondAddress.msZipCode) > 0.8)
 		iReturnValue += 1;
 	if (qFirstAddress.msCityHash == qSecondAddress.msCityHash)
 		iReturnValue += 2;
@@ -151,7 +143,7 @@ int AddressBitMapMaker(const CAddress& qFirstAddress, const CAddress& qSecondAdd
 		iReturnValue += 12;
 	if (StringCheck(qFirstAddress.msOtherStuff, qSecondAddress.msOtherStuff) > 0.75)
 		iReturnValue += 16;
-	if (qFirstAddress.miHouseNumber == qSecondAddress.miHouseNumber)
+	if (StringCheck(qFirstAddress.msHouseNumber, qSecondAddress.msHouseNumber) > 0.9)
 		iReturnValue += 32;
 	return iReturnValue;
 }

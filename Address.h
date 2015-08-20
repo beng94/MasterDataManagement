@@ -6,12 +6,13 @@
 
 bool IsANumber(char cCharacter);
 double StringCheck(const std::string& sFirstString, const std::string& sSecondString);
-double WordCheck(const std::string& sFirstWord, const std::string& SecondWord);
+double WordCheck(const std::string& sFirstWord, const std::string& sSecondWord);
+double ZipCodeCheck(const std::string& sFirstZip, const std::string& sSecondZip);
 
 class CAddress{
 public:
-	int miHouseNumber;
-	int miZipCode;
+	std::string msHouseNumber;
+	std::string msZipCode;
 
 	bool mbIsAPOBox;
 
