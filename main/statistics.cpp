@@ -54,11 +54,10 @@ bool Statistics::calculate_oddsVector()
     entities.reserve(450000);
     read_training_data(entities);
 
-    int bits = 12;
     //first for good guess, second for bad
     std::vector<std::pair<int, int>> counts;
     //counts size should be 2^bits
-    counts.reserve(1 << bits);
+    counts.reserve(1 << BITMAP_SIZE);
 
     //size or length or sth else?
     for(int i = 0; i < entities.size(); i++)
@@ -73,6 +72,12 @@ bool Statistics::calculate_oddsVector()
             if(isDuplicate(i, j)) counts[cmp].first++;
             else counts[cmp].second++;
         }
+    }
+
+    //Fill the oddsVector with probabilities
+    for(int i = 0; i < counts.size(); i++)
+    {
+        oddsVector[i] = counts[i].first / (counts[i].first + counts[i].second);
     }
 
     return true;

@@ -5,7 +5,7 @@
 #include <string>
 #include "../entity.hpp"
 
-const int STASH_COUNT= 12;
+const int BITMAP_SIZE = 12;
 
 class Statistics {
   private:
@@ -16,9 +16,10 @@ class Statistics {
     Statistics(const std::string& training_data_filename,
                const std::string& ground_truth_filename)
                : training_data_filename(training_data_filename),
-                 ground_truth_filename(ground_truth_filename),
-                 oddsVector(STASH_COUNT,0.5)
-                 {}
+                 ground_truth_filename(ground_truth_filename)
+    {
+        oddsVector.reserve(1 << BITMAP_SIZE);
+    }
 
     void read_training_data(std::vector<Entity>&);
     bool calculate_oddsVector();
