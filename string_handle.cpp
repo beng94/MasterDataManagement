@@ -124,3 +124,21 @@ int StringExactMatch(const std::vector<std::string>& lhs_string,
 
     return matches;
 }
+
+
+std::string StringWordRemove(std::string sString){
+	std::vector<std::string> saSpaceSplit, saResultString;
+	bool bFlag;
+	split(sString, ' ', saSpaceSplit);
+	for (int i = 0; i < saSpaceSplit.size() - 1; i++){
+		bFlag = true;
+		for (int j = i + 1; j < saSpaceSplit.size(); j++){
+			if (str_hash(saSpaceSplit[i]) == str_hash(saSpaceSplit[j]))
+				bFlag = false;
+		}
+		if (bFlag)
+			saResultString.push_back(saSpaceSplit[i]);
+	}
+	saResultString.push_back(saSpaceSplit[saSpaceSplit.size()-1]);
+	return join(saResultString, ' ', 0, saResultString.size() - 1);
+}
