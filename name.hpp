@@ -29,6 +29,7 @@ private:
     void get_nickname(std::string& name);
     int name_cmp(const Name& name);
     int title_cmp(const Name& name);
+    int specs_cmp(const Name& name);
 };
 
 #endif

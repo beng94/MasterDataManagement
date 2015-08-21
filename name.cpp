@@ -314,8 +314,19 @@ int Name::title_cmp(const Name& rhs_name)
     if(title_min_cnt == 0) return 0;
     else return same_titles / title_min_cnt;
 }
+
+int Name::specs_cmp(const Name& rhs_name)
+{
+   int same_specs = StringExactMatch(this->specs, rhs_name.specs);
+   int specs_min_cnt = std::min(this->specs.size(), rhs_name.specs.size());
+
+   if(specs_min_cnt == 0) return 0;
+   else return (same_specs / (double) specs_min_cnt) >= 0.5;
+}
+
 int Name::NameBitMapMaker(const Name& rhs_name)
 {
     int name_sim = this->name_cmp(rhs_name); //2 bits
     int title_sim = this->title_cmp(rhs_name); //1 bit
+    int specs_sim = this->specs_cmp(rhs_name); //1 bit
 }
