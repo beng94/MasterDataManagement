@@ -111,9 +111,7 @@ bool Statistics::calculate_oddsVector()
     std::cout << "Ground truth file read in" << std::endl;
 
     //first for good guess, second for bad
-    std::vector<std::pair<int, int>> counts;
-    //counts size should be 2^bits
-    counts.reserve(sum_of_pows_of_two(BITMAP_SIZE));
+    std::vector<std::pair<int, int>> counts (sum_of_pows_of_two(BITMAP_SIZE), {0, 0});
 
     //size or length or sth else?
     for(uint i = 0; i < entities.size(); i++)
