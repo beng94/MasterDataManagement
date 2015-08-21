@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <fstream>
 #include <omp.h>
+#include <unordered_map>
 
 #include "../csvparser.h"
 #include "../string_handle.hpp"
@@ -22,7 +23,8 @@ static char** parse_line(CsvParser *parser)
 
 void Statistics::read_training_data(std::vector<Entity>& vec)
 {
-    CsvParser *parser = CsvParser_new(training_data_filename.c_str(), ",", 0);
+    //CsvParser *parser = CsvParser_new(training_data_filename.c_str(), ",", 0);
+    CsvParser *parser = CsvParser_new("testing_data.csv", ",", 0);
     std::vector<Entity> entities_vec;
 
     while(true)
@@ -107,13 +109,51 @@ bool Statistics::calculate_oddsVector()
     read_training_data(entities);
     std::cout << "Training data read in" << std::endl;
 
+    /*
     std::unordered_map<int, std::vector<int>> ground_truth_map;
     read_ground_truth_file(ground_truth_map);
     std::cout << "Ground truth file read in" << std::endl;
 
     //first for good guess, second for bad
     std::vector<std::pair<int, int>> counts (sum_of_pows_of_two(BITMAP_SIZE), {0, 0});
+    */
 
+    std::unordered_map<std::string, std::vector<Entity>> cluster_map;
+    for(auto ent: entities)
+    {
+        auto find = cluster_map.find(ent.address.msState);
+        if(find != cluster_map.end())
+        {
+            find->second.push_back(ent);
+        }
+        else
+        {
+            std::vector<Entity> new_vec;
+            vec.reserve(15000);
+            cluster_map.insert({ent.address.msState, new_vec});
+        }
+    }
+
+    std::ofstream file;
+    file.open("output.txt");
+
+    for(auto state: cluster_map)
+    {
+        std::cout << state.second[0].address.msState << " " << state.second.size() << std::endl;
+        int size = state.second.size();
+         for(int i = 0; size; i++)
+         {
+            for(int j = i + 1; j < size; j++)
+            {
+                double cmp = entities[i].BitMapMake(entities[j]);
+                file << i << "," << j << "," << cmp << std::endl;
+            }
+         }
+    }
+
+    file.close();
+
+    /*
     //size or length or sth else?
     for(uint i = 0; i < entities.size(); i++)
     {
@@ -137,7 +177,7 @@ bool Statistics::calculate_oddsVector()
         oddsVector[i] = counts[i].first / (counts[i].first + counts[i].second);
     }
     std::cout << "OddsVector calculated" << std::endl;
-
+    */
     return true;
 }
 
