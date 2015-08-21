@@ -329,4 +329,7 @@ int Name::NameBitMapMaker(const Name& rhs_name)
     int name_sim = this->name_cmp(rhs_name); //2 bits
     int title_sim = this->title_cmp(rhs_name); //1 bit
     int specs_sim = this->specs_cmp(rhs_name); //1 bit
+
+    int result = name_sim + (title_sim << 2) + (specs_sim << 3);
+    return result;
 }
