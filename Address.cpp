@@ -1,15 +1,45 @@
-#include "Address.h"
-
-#include <iostream>
-#include <algorithm>
 #include <vector>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
-
-#include "string_handle.hpp"
+#include "entity.hpp"
+#include "Address.h"
+#include <algorithm>
 
 bool IsANumber(char cCharacter){
 	return cCharacter >= '0' && cCharacter <= '9';
+}
+
+double WordCheck(const std::string& sFirstWord, const std::string& sSecondWord){
+	int iMinSize = std::min(sFirstWord.length(), sSecondWord.length());
+	int iMaxSize = std::max(sFirstWord.length(), sSecondWord.length());
+	double fReturnValue = 0;
+	for (int i = 0; i < iMinSize; i++)
+		if (sFirstWord[i] == sSecondWord[i])
+			fReturnValue++;
+	return fReturnValue / iMaxSize;
+}
+
+
+double StringCheck(const std::string& sFirstString, const std::string& sSecondString){
+	std::vector<std::string> saFirstString, saSecondString;
+	split(sFirstString, ' ', saFirstString);
+	split(sSecondString, ' ', saSecondString);
+	std::vector<double> faSimilarities;
+
+	for (auto str_a : saFirstString){
+		double fMaxSimilarity = 0.0;
+		for (auto str_b : saSecondString){
+			double fCompare = WordCheck(str_a, str_b);
+			if (fCompare > fMaxSimilarity)
+				fMaxSimilarity = fCompare;
+		}
+		faSimilarities.push_back(fMaxSimilarity);
+	}
+
+	double fProbabilitySum = 0.0;
+	for (int i = 0; i < saFirstString.size(); i++)
+		fProbabilitySum += faSimilarities.at(i) * saFirstString.at(i).length();
+	return fProbabilitySum / (sFirstString.length() - saFirstString.size() + 1);
 }
 
 double ZipCodeCheck(const std::string& sFirstZip, const std::string& sSecondZip){
@@ -22,10 +52,10 @@ double ZipCodeCheck(const std::string& sFirstZip, const std::string& sSecondZip)
 	return StringCheck(sFirstZip, sSecondZip);
 }
 
-CAddress::CAddress(const std::string& sAddressString){
-  std::string saAddressString = trim(sAddressString);
+CAddress::CAddress(std::string sAddressString){
+	sAddressString = trim(sAddressString);
 	std::vector<std::string> saFields;
-	split(saAddressString, ',', saFields);
+	split(sAddressString, ',', saFields);
 	int iFirstFieldsSize = saFields.size();
 	///< Separates based on commas, checks if the address is irregular
 
@@ -96,7 +126,7 @@ CAddress::CAddress(const std::string& sAddressString){
 
 }
 
-int AddressBitMapMaker(const CAddress& qFirstAddress, const CAddress& qSecondAddress){
+/*int AddressBitMapMaker(const CAddress& qFirstAddress, const CAddress& qSecondAddress){
 	double fStreetMatch = StringCheck(qFirstAddress.msStreet, qSecondAddress.msStreet);
 	int iReturnValue = 0;
 	if (ZipCodeCheck(qFirstAddress.msZipCode, qSecondAddress.msZipCode) > 0.8)
@@ -115,5 +145,31 @@ int AddressBitMapMaker(const CAddress& qFirstAddress, const CAddress& qSecondAdd
 		iReturnValue += 16;
 	if (StringCheck(qFirstAddress.msHouseNumber, qSecondAddress.msHouseNumber) > 0.9)
 		iReturnValue += 32;
+	return iReturnValue;
+}*/
+
+int AddressBitMapMaker(const CAddress& qFirstAddress, const CAddress& qSecondAddress){
+	int iReturnValue = 50;
+	double fStreetMatch = StringCheck(qFirstAddress.msStreet, qSecondAddress.msStreet);
+	if (ZipCodeCheck(qFirstAddress.msZipCode, qSecondAddress.msZipCode) > 0.8)
+		iReturnValue += 10;
+	if (qFirstAddress.msCityHash == qSecondAddress.msCityHash)
+		iReturnValue += 20;
+	if (fStreetMatch < 0.25)
+		iReturnValue -= 20;
+	else if (fStreetMatch >= 0.25 && fStreetMatch < 0.5)
+		iReturnValue -= 10;
+	else if (fStreetMatch >= 0.5 && fStreetMatch < 0.75)
+		iReturnValue += 10;
+	else
+		iReturnValue += 20;
+	if (StringCheck(qFirstAddress.msOtherStuff, qSecondAddress.msOtherStuff) > 0.75)
+		iReturnValue += 10;
+	if (StringCheck(qFirstAddress.msHouseNumber, qSecondAddress.msHouseNumber) > 0.9)
+		iReturnValue += 10;
+	if (iReturnValue > 100)
+		return 100;
+	if (iReturnValue < 0)
+		return 0;
 	return iReturnValue;
 }
