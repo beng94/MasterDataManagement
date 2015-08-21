@@ -70,12 +70,20 @@ str_hash(const std::string& str)
 }
 
 double WordCheck(const std::string& sFirstWord, const std::string& sSecondWord){
-	int iMinSize = std::min(sFirstWord.length(), sSecondWord.length());
-	int iMaxSize = std::max(sFirstWord.length(), sSecondWord.length());
+    int iMinSize = sFirstWord.length();
+    int iMaxSize = sSecondWord.length();
+    if (iMinSize > iMaxSize)
+    {
+        int tmp = iMinSize;
+        iMinSize = iMaxSize;
+        iMaxSize = tmp;
+    }
+
 	double fReturnValue = 0;
+
 	for (int i = 0; i < iMinSize; i++)
-		if (sFirstWord[i] == sSecondWord[i])
-			fReturnValue++;
+		if (sFirstWord[i] == sSecondWord[i]) fReturnValue++;
+
 	return fReturnValue / iMaxSize;
 }
 
