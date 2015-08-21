@@ -4,6 +4,7 @@
 #include "entity.hpp"
 #include "Address.h"
 #include <algorithm>
+#include "string_handle.hpp"
 
 bool IsANumber(char cCharacter){
 	return cCharacter >= '0' && cCharacter <= '9';
