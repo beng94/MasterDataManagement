@@ -111,7 +111,7 @@ bool Statistics::calculate_oddsVector()
     //first for good guess, second for bad
     std::vector<std::pair<int, int>> counts;
     //counts size should be 2^bits
-    counts.reserve(sum_of_pow_of_two(BITMAP_SIZE));
+    counts.reserve(sum_of_pows_of_two(BITMAP_SIZE));
 
     //size or length or sth else?
     for(uint i = 0; i < entities.size(); i++)

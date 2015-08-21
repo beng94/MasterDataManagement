@@ -5,6 +5,8 @@
 #include "Address.h"
 #include "tax.hpp"
 
+const int BITMAP_SIZE = NAME_BITS + ADDR_BITS + TAX_BITS;
+
 class Entity
 {
 public:

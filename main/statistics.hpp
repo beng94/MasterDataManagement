@@ -6,8 +6,6 @@
 #include <string>
 #include "../entity.hpp"
 
-const int BITMAP_SIZE = 12;
-
 class Statistics {
   private:
     const std::string training_data_filename;

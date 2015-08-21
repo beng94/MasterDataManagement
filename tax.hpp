@@ -3,6 +3,8 @@
 
 #include <string>
 
+const int TAX_BITS = 2;
+
 class Taxonomies
 {
 public:
