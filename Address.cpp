@@ -20,7 +20,7 @@ double ZipCodeCheck(const std::string& sFirstZip, const std::string& sSecondZip)
 	return StringCheck(sFirstZip, sSecondZip);
 }
 
-CAddress::CAddress(std::string sAddressString){
+CAddress::CAddress(std::string& sAddressString){
 	sAddressString = trim(sAddressString);
 	std::vector<std::string> saFields;
 	split(sAddressString, ',', saFields);

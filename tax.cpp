@@ -18,6 +18,6 @@ Taxonomies::Taxonomies(const std::string& sTaxonomyString){
 }
 
 double TaxonomyBitMapMaker(const Taxonomies& qFirstTaxonomy, const Taxonomies& qSecondTaxonomy){
-	return fStringSim = StringCheck(qFirstTaxonomy.msTaxonomy, qSecondTaxonomy.msTaxonomy);
+	return StringCheck(qFirstTaxonomy.msTaxonomy, qSecondTaxonomy.msTaxonomy);
 }
 

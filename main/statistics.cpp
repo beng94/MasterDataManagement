@@ -130,18 +130,19 @@ bool Statistics::calculate_oddsVector()
         {
             std::vector<Entity> new_vec;
             new_vec.reserve(15000);
+            new_vec.push_back(ent);
             cluster_map.insert({ent.address.msState, new_vec});
         }
     }
 
+    std::cout << "Calculating output" << std::endl;
     std::ofstream file;
-    file.open("output.txt");
-
+    file.open("output.csv");
     for(auto state: cluster_map)
     {
         std::cout << state.second[0].address.msState << " " << state.second.size() << std::endl;
         int size = state.second.size();
-         for(int i = 0; size; i++)
+         for(int i = 0; i < size; i++)
          {
             for(int j = i + 1; j < size; j++)
             {
@@ -150,7 +151,6 @@ bool Statistics::calculate_oddsVector()
             }
          }
     }
-
     file.close();
 
     /*
