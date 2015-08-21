@@ -87,7 +87,7 @@ void Statistics::read_ground_truth_file(std::unordered_map<int, std::vector<int>
     }
 }
 
-static bool isDuplicate(int i, int j, std::unordered_map<int, std::vector<int>> map)
+static bool isDuplicate(int i, int j, std::unordered_map<int, std::vector<int>>& map)
 {
     auto find = map.find(i);
     if(find != map.end())
@@ -102,7 +102,7 @@ bool Statistics::calculate_oddsVector()
 {
     //TODO: LOTS OF FUMCTIONS ABOVE
     std::vector<Entity> entities;
-    entities.reserve(sum_of_pows_of_two(BITMAP_SIZE));
+    entities.reserve(450000);
     read_training_data(entities);
 
     std::unordered_map<int, std::vector<int>> ground_truth_map;
@@ -111,7 +111,7 @@ bool Statistics::calculate_oddsVector()
     //first for good guess, second for bad
     std::vector<std::pair<int, int>> counts;
     //counts size should be 2^bits
-    counts.reserve(1 << BITMAP_SIZE);
+    counts.reserve(sum_of_pow_of_two(BITMAP_SIZE));
 
     //size or length or sth else?
     for(uint i = 0; i < entities.size(); i++)
@@ -129,6 +129,7 @@ bool Statistics::calculate_oddsVector()
     }
 
     //Fill the oddsVector with probabilities
+    oddsVector.reserve(counts.size());
     for(uint i = 0; i < counts.size(); i++)
     {
         oddsVector[i] = counts[i].first / (counts[i].first + counts[i].second);

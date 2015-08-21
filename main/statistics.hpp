@@ -18,9 +18,7 @@ class Statistics {
                const std::string& ground_truth_filename)
                : training_data_filename(training_data_filename),
                  ground_truth_filename(ground_truth_filename)
-    {
-        oddsVector.reserve(1 << BITMAP_SIZE);
-    }
+    {}
 
     void read_training_data(std::vector<Entity>&);
     void read_ground_truth_file(std::unordered_map<int, std::vector<int>>&);
