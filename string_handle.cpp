@@ -97,3 +97,18 @@ double StringCheck(const std::string& sFirstString, const std::string& sSecondSt
 		fProbabilitySum += faSimilarities.at(i) * saFirstString.at(i).length();
 	return fProbabilitySum / (sFirstString.length() - saFirstString.size() + 1);
 }
+
+int StringExactMatch(const std::vector<std::string>& lhs_string,
+                     const std::vector<std::string>& rhs_string)
+{
+    int matches = 0;
+    for(auto str_lhs: lhs_string)
+    {
+        for(auto str_rhs: rhs_string)
+        {
+            if(str_lhs == str_rhs) matches++;
+        }
+    }
+
+    return matches;
+}
