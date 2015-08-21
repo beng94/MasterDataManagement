@@ -259,4 +259,85 @@ Name::Name(std::string name)
     this->get_title(name);
 
     this->get_nickname(name);
+
+    this->name = name;
+}
+
+bool find_abbrev(const std::string& c, const std::vector<std::string>& rhs_chunks)
+{
+    for(auto str: rhs_chunks)
+        if(str[0] == c[0]) return true;
+
+    return false;
+}
+
+bool contains_abbrev(const std::vector<std::string>& lhs_chunks,
+                     const std::vector<std::string>& rhs_chunks)
+{
+    for(auto str: lhs_chunks)
+    {
+        if(str.length() == 1)
+        {
+            if(find_abbrev(str, rhs_chunks)) return true;
+        }
+    }
+
+    for(auto str: rhs_chunks)
+    {
+         if(str.length() == 1)
+         {
+            if(find_abbrev(str, lhs_chunks)) return true;
+         }
+    }
+
+    return false;
+}
+
+int Name::name_cmp(const Name& rhs_name)
+{
+    std::vector<std::string> lhs_chunks;
+    std::vector<std::string> rhs_chunks;
+    split(this->name, ' ', lhs_chunks);
+    split(rhs_name.name, ' ', rhs_chunks);
+
+    double name_cmp = StringCheck(this->name, rhs_name.name);
+
+    if(name_cmp > 0.5 && contains_abbrev(lhs_chunks, rhs_chunks))
+    {
+         name_cmp *= 0.8;
+         name_cmp += 0.2;
+    }
+
+    if(name_cmp >= 0.75) return 3;
+    else if(name_cmp >= 0.5 && name_cmp < 0.75) return 2;
+    else if(name_cmp >= 0.25 && name_cmp < 0.5) return 1;
+    else return 0;
+}
+
+int Name::title_cmp(const Name& rhs_name)
+{
+    int same_titles = StringExactMatch(this->title, rhs_name.title);
+    int title_min_cnt = std::min(this->title.size(), rhs_name.title.size());
+
+    if(title_min_cnt == 0) return 0;
+    else return same_titles / title_min_cnt;
+}
+
+int Name::specs_cmp(const Name& rhs_name)
+{
+   int same_specs = StringExactMatch(this->specs, rhs_name.specs);
+   int specs_min_cnt = std::min(this->specs.size(), rhs_name.specs.size());
+
+   if(specs_min_cnt == 0) return 0;
+   else return (same_specs / (double) specs_min_cnt) >= 0.5;
+}
+
+int Name::NameBitMapMaker(const Name& rhs_name)
+{
+    int name_sim = this->name_cmp(rhs_name); //2 bits
+    int title_sim = this->title_cmp(rhs_name); //1 bit
+    int specs_sim = this->specs_cmp(rhs_name); //1 bit
+
+    int result = name_sim + (title_sim << 2) + (specs_sim << 3);
+    return result;
 }

@@ -13,5 +13,6 @@ std::vector<std::string>& split(const std::string&, char, std::vector<std::strin
 std::string str_hash(std::string& str);
 double WordCheck(const std::string& sFirstWord, const std::string& sSecondWord);
 double StringCheck(const std::string& sFirstString, const std::string& sSecondString);
+int StringExactMatch(const std::vector<std::string>&, const std::vector<std::string>&);
 
 #endif

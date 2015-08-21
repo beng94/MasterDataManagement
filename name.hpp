@@ -16,10 +16,15 @@ public:
 
     Name(std::string name);
 
+    int NameBitMapMaker(const Name& name_a);
+
 private:
     void get_specs(std::string& name);
     void get_title(std::string& name);
     void get_nickname(std::string& name);
+    int name_cmp(const Name& name);
+    int title_cmp(const Name& name);
+    int specs_cmp(const Name& name);
 };
 
 #endif
