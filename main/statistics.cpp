@@ -129,7 +129,7 @@ bool Statistics::calculate_oddsVector()
         else
         {
             std::vector<Entity> new_vec;
-            vec.reserve(15000);
+            new_vec.reserve(15000);
             cluster_map.insert({ent.address.msState, new_vec});
         }
     }
