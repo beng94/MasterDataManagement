@@ -26,7 +26,7 @@ public:
 	std::string msOtherStuffHash;
 
 
-	CAddress(std::string sAddressString);
+	CAddress(const std::string& sAddressString);
 };
 
 int AddressBitMapMaker(const CAddress& qFirstAddress, const CAddress& qSecondAddress);
