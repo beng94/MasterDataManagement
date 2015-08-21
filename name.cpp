@@ -251,9 +251,11 @@ Name::Name(std::string name)
     this->get_title(name);
 
     this->get_nickname(name);
+
+    this->name = name;
 }
 
-bool find_abbrev(std::string& c, std::vector<std::string>& rhs_chunks)
+bool find_abbrev(const std::string& c, const std::vector<std::string>& rhs_chunks)
 {
     for(auto str: rhs_chunks)
         if(str[0] == c[0]) return true;
@@ -261,8 +263,8 @@ bool find_abbrev(std::string& c, std::vector<std::string>& rhs_chunks)
     return false;
 }
 
-bool contains_abbrev(std::vector<std::string>& lhs_chunks,
-                            std::vector<std::string>& rhs_chunks)
+bool contains_abbrev(const std::vector<std::string>& lhs_chunks,
+                     const std::vector<std::string>& rhs_chunks)
 {
     for(auto str: lhs_chunks)
     {
@@ -283,24 +285,27 @@ bool contains_abbrev(std::vector<std::string>& lhs_chunks,
     return false;
 }
 
-int Name::name_cmp(Name& rhs_name)
+int Name::name_cmp(const Name& rhs_name)
 {
     std::vector<std::string> lhs_chunks;
     std::vector<std::string> rhs_chunks;
     split(this->name, ' ', lhs_chunks);
     split(rhs_name.name, ' ', rhs_chunks);
 
-    bool abbrev = contains_abbrev(lhs_chunks, rhs_chunks);
     double name_cmp = StringCheck(this->name, rhs_name.name);
 
-    if(contains_abbrev(lhs_chunks, rhs_chunks))
+    if(name_cmp > 0.5 && contains_abbrev(lhs_chunks, rhs_chunks))
     {
          name_cmp *= 0.8;
          name_cmp += 0.2;
     }
 
-    if(name_cmp >= 0.75) return 0b11;
-    else if(name_cmp >= 0.5 && name_cmp < 0.75) return 0b10;
-    else if(name_cmp >= 0.25 && name_cmp < 0.5) return 0b01;
-    else return 0b00;
+    if(name_cmp >= 0.75) return 3;
+    else if(name_cmp >= 0.5 && name_cmp < 0.75) return 2;
+    else if(name_cmp >= 0.25 && name_cmp < 0.5) return 1;
+    else return 0;
+}
+int Name::NameBitMapMaker(const Name& rhs_name)
+{
+    int name_sim = this->name_cmp(rhs_name); //2 bits
 }
