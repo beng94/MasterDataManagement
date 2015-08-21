@@ -19,7 +19,7 @@ public:
            id{id}, name{name}, address{addr}, taxonomies{tax}
     {}
 
-    int BitMapMake(const Entity& rhs_entity);
+    double BitMapMake(const Entity& rhs_entity);
 };
 
 #endif
