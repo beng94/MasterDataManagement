@@ -5,6 +5,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 #include <tuple>
+#include <fstream>
 
 #include "../csvparser.h"
 #include "../string_handle.hpp"
@@ -44,9 +45,33 @@ void Statistics::read_training_data(std::vector<Entity>& vec)
     CsvParser_destroy(parser);
 }
 
-static bool isDuplicate(int i, int j)
+void Statistics::read_ground_truth_file(std::unordered_map<int, std::vector<int>>& map)
 {
+    std::ifstream file(ground_truth_filename);
+    try
+    {
+        std::string line;
+        while(std::getline(file, line))
+        {
+            std::vector<std::string> chunks;
+            split(line, ',', chunks);
 
+            int id_a = boost::lexical_cast<int>(chunks[0]);
+            int id_b = boost::lexical_cast<int>(chunks[1]);
+
+            auto find = map.find(id_a);
+            if(find != map.end())
+                find->second.push_back(id_b);
+            else
+                map.insert({id_a, {id_b}});
+        }
+        file.close();
+    }
+    catch(std::exception& e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+}
 }
 
 bool Statistics::calculate_oddsVector()
@@ -55,6 +80,9 @@ bool Statistics::calculate_oddsVector()
     std::vector<Entity> entities;
     entities.reserve(450000);
     read_training_data(entities);
+
+    std::unordered_map<int, std::vector<int>> ground_truth_map;
+    read_ground_truth_file(ground_truth_map);
 
     //first for good guess, second for bad
     std::vector<std::pair<int, int>> counts;

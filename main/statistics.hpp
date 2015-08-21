@@ -2,6 +2,7 @@
 #define STATISTICS_HPP
 
 #include <vector>
+#include <unordered_map>
 #include <string>
 #include "../entity.hpp"
 
@@ -22,6 +23,7 @@ class Statistics {
     }
 
     void read_training_data(std::vector<Entity>&);
+    void read_ground_truth_file(std::unordered_map<int, std::vector<int>>&);
     bool calculate_oddsVector();
     bool calculate_and_save_results(const std::string& testing_data_filename,
                                     const std::string& result_filename);
