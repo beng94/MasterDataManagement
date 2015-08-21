@@ -5,6 +5,7 @@
 #include <fstream>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
+#include <omp.h>
 
 #include "string_handle.hpp"
 
@@ -334,9 +335,13 @@ int Name::specs_cmp(const Name& rhs_name)
 
 int Name::NameBitMapMaker(const Name& rhs_name)
 {
-    int name_sim = this->name_cmp(rhs_name); //2 bits
-    int title_sim = this->title_cmp(rhs_name); //1 bit
-    int specs_sim = this->specs_cmp(rhs_name); //1 bit
+    int name_sim, title_sim, specs_sim;
+    #pragma omp parallel
+    {
+        name_sim = this->name_cmp(rhs_name); //2 bits
+        title_sim = this->title_cmp(rhs_name); //1 bit
+        specs_sim = this->specs_cmp(rhs_name); //1 bit
+    }
 
     int result = name_sim + (title_sim << 2) + (specs_sim << 3);
     return result;

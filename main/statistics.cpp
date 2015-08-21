@@ -7,6 +7,7 @@
 #include <tuple>
 #include <algorithm>
 #include <fstream>
+#include <omp.h>
 
 #include "../csvparser.h"
 #include "../string_handle.hpp"
@@ -116,6 +117,7 @@ bool Statistics::calculate_oddsVector()
     //size or length or sth else?
     for(uint i = 0; i < entities.size(); i++)
     {
+        #pragma omp parallel for
         for(uint j = i + 1; j < entities.size(); j++)
         {
             //to generate the bitmap, that we'll use as an index for the
