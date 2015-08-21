@@ -46,6 +46,19 @@ void Statistics::read_training_data(std::vector<Entity>& vec)
     CsvParser_destroy(parser);
 }
 
+static int sum_of_pows_of_two(int bits)
+{
+    int sum = 0;
+    int pow = 1;
+    for(int i = 0; i < bits; i++)
+    {
+         sum += pow;
+         pow <<= 1;
+    }
+
+    return sum;
+}
+
 void Statistics::read_ground_truth_file(std::unordered_map<int, std::vector<int>>& map)
 {
     std::ifstream file(ground_truth_filename);
@@ -89,7 +102,7 @@ bool Statistics::calculate_oddsVector()
 {
     //TODO: LOTS OF FUMCTIONS ABOVE
     std::vector<Entity> entities;
-    entities.reserve(450000);
+    entities.reserve(sum_of_pows_of_two(BITMAP_SIZE));
     read_training_data(entities);
 
     std::unordered_map<int, std::vector<int>> ground_truth_map;
