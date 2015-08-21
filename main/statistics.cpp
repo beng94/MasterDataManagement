@@ -5,6 +5,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 #include <tuple>
+#include <algorithm>
 #include <fstream>
 
 #include "../csvparser.h"
@@ -72,6 +73,16 @@ void Statistics::read_ground_truth_file(std::unordered_map<int, std::vector<int>
         std::cout << e.what() << std::endl;
     }
 }
+
+static bool isDuplicate(int i, int j, std::unordered_map<int, std::vector<int>> map)
+{
+    auto find = map.find(i);
+    if(find != map.end())
+    {
+        std::vector<int> vec = find->second;
+        return std::find(vec.begin(), vec.end(), j) != vec.end();
+    }
+    else return false;
 }
 
 bool Statistics::calculate_oddsVector()
@@ -99,7 +110,7 @@ bool Statistics::calculate_oddsVector()
             int cmp = entities_cmp(entities[i], entities[j]);
 
             //isDuplicate should look for the given ids in the ground_truth file
-            if(isDuplicate(i, j)) counts[cmp].first++;
+            if(isDuplicate(i, j, ground_truth_map)) counts[cmp].first++;
             else counts[cmp].second++;
         }
     }
