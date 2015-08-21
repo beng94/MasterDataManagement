@@ -5,7 +5,7 @@
 #include <sstream>
 
 std::string
-trim(std::string str)
+trim(const std::string& str)
 {
     int cnt_beg = 0;
     int cnt_end = 0;
@@ -42,7 +42,7 @@ join(std::vector<std::string>& vec, char sep, int start, int end)
 }
 
 void
-char_remove(std::string& str, std::string remove_chars)
+char_remove(std::string& str,const std::string& remove_chars)
 {
     for(auto c: remove_chars)
         str.erase (std::remove(str.begin(), str.end(), c), str.end());
@@ -62,7 +62,7 @@ split(const std::string &str, char delim, std::vector<std::string> &elems)
 }
 
 std::string
-str_hash(std::string& str)
+str_hash(const std::string& str)
 {
     std::vector<std::string> codes;
     DoubleMetaphone(str, &codes);

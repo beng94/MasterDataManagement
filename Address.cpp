@@ -22,10 +22,10 @@ double ZipCodeCheck(const std::string& sFirstZip, const std::string& sSecondZip)
 	return StringCheck(sFirstZip, sSecondZip);
 }
 
-CAddress::CAddress(std::string sAddressString){
-	sAddressString = trim(sAddressString);
+CAddress::CAddress(const std::string& sAddressString){
+  std::string saAddressString = trim(sAddressString);
 	std::vector<std::string> saFields;
-	split(sAddressString, ',', saFields);
+	split(saAddressString, ',', saFields);
 	int iFirstFieldsSize = saFields.size();
 	///< Separates based on commas, checks if the address is irregular
 

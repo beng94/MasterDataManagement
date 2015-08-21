@@ -15,7 +15,7 @@ public:
     CAddress address;
     Taxonomies taxonomies;
 
-    Entity(int id, std::string name, std::string addr, std::string tax) :
+    Entity(int id, const std::string& name, const std::string& addr, const std::string& tax) :
            id{id}, name{name}, address{addr}, taxonomies{tax}
     {}
 
