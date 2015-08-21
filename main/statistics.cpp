@@ -101,9 +101,9 @@ bool Statistics::calculate_oddsVector()
     counts.reserve(1 << BITMAP_SIZE);
 
     //size or length or sth else?
-    for(int i = 0; i < entities.size(); i++)
+    for(uint i = 0; i < entities.size(); i++)
     {
-        for(int j = i + 1; j < entities.size(); j++)
+        for(uint j = i + 1; j < entities.size(); j++)
         {
             //to generate the bitmap, that we'll use as an index for the
             //oddsVector and counts
@@ -116,7 +116,7 @@ bool Statistics::calculate_oddsVector()
     }
 
     //Fill the oddsVector with probabilities
-    for(int i = 0; i < counts.size(); i++)
+    for(uint i = 0; i < counts.size(); i++)
     {
         oddsVector[i] = counts[i].first / (counts[i].first + counts[i].second);
     }

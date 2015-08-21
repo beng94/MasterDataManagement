@@ -97,7 +97,7 @@ double StringCheck(const std::string& sFirstString, const std::string& sSecondSt
 	}
 
 	double fProbabilitySum = 0.0;
-	for (int i = 0; i < saFirstString.size(); i++)
+	for (uint i = 0; i < saFirstString.size(); i++)
 		fProbabilitySum += faSimilarities.at(i) * saFirstString.at(i).length();
 	return fProbabilitySum / (sFirstString.length() - saFirstString.size() + 1);
 }
