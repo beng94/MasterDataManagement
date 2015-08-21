@@ -6,7 +6,7 @@
 
 const int NAME_BITS = 4;
 
-void read_nicknames(const char* file);
+//void read_nicknames(const char* file);
 
 class Name
 {

@@ -134,7 +134,7 @@ std::unordered_map<std::string, std::vector<std::string>> nicknames_map;
  * and a vector of 'normal' names that can be associated with
  * the nickname.
 */
-void
+/*void
 read_nicknames(const char *file_name)
 {
     std::ifstream file(file_name);
@@ -167,6 +167,7 @@ read_nicknames(const char *file_name)
 
     file.close();
 }
+*/
 
 void
 Name::get_specs(std::string& name)
@@ -248,8 +249,6 @@ Name::get_nickname(std::string& name)
 
 Name::Name(std::string name)
 {
-    //std::cout << name << std::endl;
-
     //Remove points from the name
     char_remove(name, std::string("."));
 
@@ -258,8 +257,6 @@ Name::Name(std::string name)
 
     //To separate the title (mr, mrs, dr, ms..)
     this->get_title(name);
-
-    this->get_nickname(name);
 
     this->name = name;
 }
