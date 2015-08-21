@@ -15,6 +15,6 @@ public:
     Taxonomies(const std::string& tax);
 };
 
-int TaxonomyBitMapMaker(const Taxonomies&, const Taxonomies&);
+double TaxonomyBitMapMaker(const Taxonomies&, const Taxonomies&);
 
 #endif

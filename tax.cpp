@@ -17,7 +17,7 @@ Taxonomies::Taxonomies(const std::string& sTaxonomyString){
 	//std::cout << msTaxonomy << std::endl;
 }
 
-int TaxonomyBitMapMaker(const Taxonomies& qFirstTaxonomy, const Taxonomies& qSecondTaxonomy){
+double TaxonomyBitMapMaker(const Taxonomies& qFirstTaxonomy, const Taxonomies& qSecondTaxonomy){
 	if (StringCheck(qFirstTaxonomy.msTaxonomy, qSecondTaxonomy.msTaxonomy) < 0.25)
 		return 0;
 	else if (StringCheck(qFirstTaxonomy.msTaxonomy, qSecondTaxonomy.msTaxonomy) < 0.5)
