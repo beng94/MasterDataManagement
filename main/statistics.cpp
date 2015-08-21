@@ -104,9 +104,11 @@ bool Statistics::calculate_oddsVector()
     std::vector<Entity> entities;
     entities.reserve(450000);
     read_training_data(entities);
+    std::cout << "Training data read in" << std::endl;
 
     std::unordered_map<int, std::vector<int>> ground_truth_map;
     read_ground_truth_file(ground_truth_map);
+    std::cout << "Ground truth file read in" << std::endl;
 
     //first for good guess, second for bad
     std::vector<std::pair<int, int>> counts;
@@ -134,6 +136,7 @@ bool Statistics::calculate_oddsVector()
     {
         oddsVector[i] = counts[i].first / (counts[i].first + counts[i].second);
     }
+    std::cout << "OddsVector calculated" << std::endl;
 
     return true;
 }
