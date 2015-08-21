@@ -3,6 +3,8 @@
 
 #include <string>
 
+const int ADDR_BITS = 5;
+
 bool IsANumber(char cCharacter);
 double ZipCodeCheck(const std::string& sFirstZip, const std::string& sSecondZip);
 

@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+const int NAME_BITS = 4;
+
 void read_nicknames(const char* file);
 
 class Name

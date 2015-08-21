@@ -16,8 +16,8 @@ public:
     Entity(int id, std::string name, std::string addr, std::string tax) :
            id{id}, name{name}, address{addr}, taxonomies{tax}
     {}
-};
 
-int entities_cmp(Entity&, Entity&);
+    int BitMapMake(const Entity& rhs_entity);
+};
 
 #endif

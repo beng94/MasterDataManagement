@@ -120,7 +120,7 @@ bool Statistics::calculate_oddsVector()
         {
             //to generate the bitmap, that we'll use as an index for the
             //oddsVector and counts
-            int cmp = entities_cmp(entities[i], entities[j]);
+            int cmp = entities[i].BitMapMake(entities[j]);
 
             //isDuplicate should look for the given ids in the ground_truth file
             if(isDuplicate(i, j, ground_truth_map)) counts[cmp].first++;
