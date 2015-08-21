@@ -10,8 +10,11 @@ class Taxonomies
 public:
     /*write members here*/
     //should have an array of taxonomies
+    std::string msTaxonomy;
 
-    Taxonomies(std::string tax);
+    Taxonomies(const std::string& tax);
 };
+
+double TaxonomyBitMapMaker(const Taxonomies&, const Taxonomies&);
 
 #endif

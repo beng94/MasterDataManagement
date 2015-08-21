@@ -70,12 +70,20 @@ str_hash(const std::string& str)
 }
 
 double WordCheck(const std::string& sFirstWord, const std::string& sSecondWord){
-	int iMinSize = std::min(sFirstWord.length(), sSecondWord.length());
-	int iMaxSize = std::max(sFirstWord.length(), sSecondWord.length());
+    int iMinSize = sFirstWord.length();
+    int iMaxSize = sSecondWord.length();
+    if (iMinSize > iMaxSize)
+    {
+        int tmp = iMinSize;
+        iMinSize = iMaxSize;
+        iMaxSize = tmp;
+    }
+
 	double fReturnValue = 0;
+
 	for (int i = 0; i < iMinSize; i++)
-		if (sFirstWord[i] == sSecondWord[i])
-			fReturnValue++;
+		if (sFirstWord[i] == sSecondWord[i]) fReturnValue++;
+
 	return fReturnValue / iMaxSize;
 }
 
@@ -115,4 +123,22 @@ int StringExactMatch(const std::vector<std::string>& lhs_string,
     }
 
     return matches;
+}
+
+
+std::string StringWordRemove(std::string sString){
+	std::vector<std::string> saSpaceSplit, saResultString;
+	bool bFlag;
+	split(sString, ' ', saSpaceSplit);
+	for (int i = 0; i < saSpaceSplit.size() - 1; i++){
+		bFlag = true;
+		for (int j = i + 1; j < saSpaceSplit.size(); j++){
+			if (str_hash(saSpaceSplit[i]) == str_hash(saSpaceSplit[j]))
+				bFlag = false;
+		}
+		if (bFlag)
+			saResultString.push_back(saSpaceSplit[i]);
+	}
+	saResultString.push_back(saSpaceSplit[saSpaceSplit.size()-1]);
+	return join(saResultString, ' ', 0, saResultString.size() - 1);
 }
