@@ -17,7 +17,19 @@ Taxonomies::Taxonomies(const std::string& sTaxonomyString){
 	//std::cout << msTaxonomy << std::endl;
 }
 
-double TaxonomyBitMapMaker(const Taxonomies& qFirstTaxonomy, const Taxonomies& qSecondTaxonomy){
+double TaxonomyProbabilityCalcuate(const Taxonomies& qFirstTaxonomy, const Taxonomies& qSecondTaxonomy){
 	return StringCheck(qFirstTaxonomy.msTaxonomy, qSecondTaxonomy.msTaxonomy);
+}
+
+int TaxonomyBitMapMaker(const Taxonomies& qFirstTaxonomy, const Taxonomies& qSecondTaxonomy){
+	double fStringSim = StringCheck(qFirstTaxonomy.msTaxonomy, qSecondTaxonomy.msTaxonomy);
+	if (fStringSim < 0.25)
+		return 0;
+	else if (fStringSim < 0.5)
+		return 1;
+	else if (fStringSim < 0.75)
+		return 2;
+	else
+		return 3;
 }
 

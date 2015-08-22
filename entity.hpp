@@ -19,7 +19,8 @@ public:
            id{id}, name{name}, address{addr}, taxonomies{tax}
     {}
 
-    double BitMapMake(const Entity& rhs_entity);
+    int BitMapMake(const Entity& rhs_entity);
+    double ProbabilityCalculate(const Entity& rhs_entity);
 };
 
 #endif

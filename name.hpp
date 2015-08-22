@@ -19,6 +19,7 @@ public:
     Name(std::string name);
 
     int NameBitMapMaker(const Name& name_a);
+    int NameProbabilityCalculate(const Name& rhs_name);
 
 private:
     void get_specs(std::string& name);

@@ -15,6 +15,8 @@ public:
     Taxonomies(const std::string& tax);
 };
 
-double TaxonomyBitMapMaker(const Taxonomies&, const Taxonomies&);
+double TaxonomyProbabilityCalculate(const Taxonomies&, const Taxonomies&);
+
+int TaxonomyBitMapMaker(const Taxonomies& qFirstTaxonomy, const Taxonomies& qSecondTaxonomy);
 
 #endif
