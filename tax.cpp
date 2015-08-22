@@ -17,7 +17,7 @@ Taxonomies::Taxonomies(const std::string& sTaxonomyString){
 	//std::cout << msTaxonomy << std::endl;
 }
 
-double TaxonomyProbabilityCalcuate(const Taxonomies& qFirstTaxonomy, const Taxonomies& qSecondTaxonomy){
+double TaxonomyProbabilityCalculate(const Taxonomies& qFirstTaxonomy, const Taxonomies& qSecondTaxonomy){
 	return StringCheck(qFirstTaxonomy.msTaxonomy, qSecondTaxonomy.msTaxonomy);
 }
 

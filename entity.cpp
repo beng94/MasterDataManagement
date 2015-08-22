@@ -2,7 +2,7 @@
 
 double Entity::ProbabilityCalculate(const Entity& rhs_entity)
 {
-		double fname_cmp = this->name.ProbabilityCalculate(rhs_entity.name) / 100.0;
+		double fname_cmp = this->name.NameProbabilityCalculate(rhs_entity.name) / 100.0;
 		double faddr_cmp = AddressProbabilityCalculate(this->address, rhs_entity.address) / 100.0;
 		double ftax_cmp = TaxonomyProbabilityCalculate(this->taxonomies, rhs_entity.taxonomies);
 

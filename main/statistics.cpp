@@ -26,8 +26,8 @@ static char** parse_line(CsvParser *parser)
 
 void Statistics::read_training_data(std::vector<Entity>& vec)
 {
-    //CsvParser *parser = CsvParser_new(training_data_filename.c_str(), ",", 0);
-    CsvParser *parser = CsvParser_new("testing_data.csv", ",", 0);
+    CsvParser *parser = CsvParser_new(training_data_filename.c_str(), ",", 0);
+    //CsvParser *parser = CsvParser_new("testing_data.csv", ",", 0);
     std::vector<Entity> entities_vec;
 
     while(true)
@@ -75,6 +75,7 @@ void Statistics::read_ground_truth_file(std::unordered_map<int, std::vector<int>
         {
             std::vector<std::string> chunks;
             split(line, ',', chunks);
+            boost::trim(chunks[1]);
 
             int id_a = boost::lexical_cast<int>(chunks[0]);
             int id_b = boost::lexical_cast<int>(chunks[1]);
@@ -101,13 +102,13 @@ static bool isDuplicate(int i, int j, std::unordered_map<int, std::vector<int>>&
         std::vector<int> vec = find->second;
         return std::find(vec.begin(), vec.end(), j) != vec.end();
     }
-    else return false;
+    return false;
 }
 
 bool Statistics::calculate_oddsVector()
 {
     std::vector<Entity> entities;
-    entities.reserve(450000);
+    entities.reserve(500000);
     read_training_data(entities);
     std::cout << "Training data read in" << std::endl;
 
@@ -116,7 +117,7 @@ bool Statistics::calculate_oddsVector()
     std::cout << "Ground truth file read in" << std::endl;
 
     //first for good guess, second for bad
-    std::vector<std::pair<int, int>> counts (sum_of_pows_of_two(BITMAP_SIZE), {0, 0});
+    std::vector<std::pair<int, int>> counts (8192, {0, 0});
 
     std::cout << "Calculating state's shit" << std::endl;
     std::unordered_map<std::string, std::vector<Entity>> cluster_map;
@@ -136,7 +137,7 @@ bool Statistics::calculate_oddsVector()
         }
     }
 
-    std::cout << "Calculating city's shit" << std::endl;
+    /*std::cout << "Calculating city's shit" << std::endl;
     for(auto state: cluster_map)
     {
         int size = state.second.size();
@@ -158,7 +159,7 @@ bool Statistics::calculate_oddsVector()
                 }
             }
         }
-    }
+    }*/
 
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
@@ -167,25 +168,22 @@ bool Statistics::calculate_oddsVector()
     std::cout << "" << std::ctime(&start_t) << " " << "Calculating output" << std::endl;
     std::cout << cluster_map.size() << std::endl;
 
-    std::vector<std::string> output;
-    output.reserve(100000);
-
+    int cnt = 0;
     for(auto state: cluster_map)
     {
         std::cout << state.second[0].address.msState << " " << state.second[0].address.msCity << " " << state.second.size() << std::endl;
         int size = state.second.size();
 
-        if(size > 15000) continue;
+        //if(size > 15000) continue;
 
-        //#pragma omp parallel for
+        #pragma omp parallel for
         for(int i = 0; i < size; i++)
         {
             #pragma omp parallel for
             for(int j = i + 1; j < size; j++)
             {
-                double cmp = state.second[i].BitMapMake(state.second[j]);
-
-                if(isDuplicate(i, j, ground_truth_map))
+                int cmp = state.second[i].BitMapMake(state.second[j]);
+                if(isDuplicate(state.second[i].id, state.second[j].id, ground_truth_map))
                 {
                     #pragma omp critical
                     counts[cmp].first++;
@@ -195,25 +193,18 @@ bool Statistics::calculate_oddsVector()
                     #pragma omp critical
                     counts[cmp].second++;
                 }
-                output.push_back(std::string(std::to_string(state.second[i].id) + ',' + std::to_string(state.second[j].id) + ',' + std::to_string(cmp)));
-            }
-            if(output.size() > 90000)
-            {
-                std::ofstream file;
-                file.open("output.txt", std::ios::app);
-                for(auto str: output)
-                {
-                    file << str << std::endl;
-                }
-                file.close();
-                output.clear();
             }
         }
         std::cout << cluster_map.size() << "/" << cnt++ << std::endl;
+        if(cnt == 47) break;
     }
 
     //Fill the oddsVector with probabilities
     oddsVector.reserve(counts.size());
+    for(int i = 0; i < counts.size(); i++)
+    {
+        oddsVector.push_back(-1);
+    }
     for(uint i = 0; i < counts.size(); i++)
     {
         if(counts[i].first == 0)
@@ -230,16 +221,20 @@ bool Statistics::calculate_oddsVector()
         }
         else
         {
-            oddsVector[i] = counts[i].first / (counts[i].first + counts[i].second);
+            oddsVector[i] = ((double)(counts[i].first)) / (double)(counts[i].first + counts[i].second);
         }
     }
     std::cout << "OddsVector calculated" << std::endl;
 
     std::ofstream file;
     file.open("oddsVector.txt");
-    for(auto d: oddsVector)
+    /*for(auto d: oddsVector)
     {
-        file << d << std::endl;
+        file << (double)d << std::endl;
+    }*/
+    for(int i = 0; i< counts.size(); i++)
+    {
+         file << oddsVector[i] << " "<< counts[i].first << " " << counts[i].second << std::endl;
     }
     file.close();
 
