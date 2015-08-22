@@ -31,10 +31,8 @@ join(std::vector<std::string>& vec, char sep, int start, int end)
     std::string str = "";
     for(int i = start; i <= end; i++)
     {
-        if(i != end)
-            str += vec.at(i) + sep;
-        else
-            str += vec.at(i);
+        if(i != end) str += vec.at(i) + sep;
+        else str += vec.at(i);
     }
 
     return str;
