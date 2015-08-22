@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <chrono>
 #include <ctime>
+#include <boost/progress.hpp>
 
 #include "../csvparser.h"
 #include "../string_handle.hpp"
@@ -105,21 +106,19 @@ static bool isDuplicate(int i, int j, std::unordered_map<int, std::vector<int>>&
 
 bool Statistics::calculate_oddsVector()
 {
-    //TODO: LOTS OF FUMCTIONS ABOVE
     std::vector<Entity> entities;
     entities.reserve(450000);
     read_training_data(entities);
     std::cout << "Training data read in" << std::endl;
 
-    /*
     std::unordered_map<int, std::vector<int>> ground_truth_map;
     read_ground_truth_file(ground_truth_map);
     std::cout << "Ground truth file read in" << std::endl;
 
     //first for good guess, second for bad
     std::vector<std::pair<int, int>> counts (sum_of_pows_of_two(BITMAP_SIZE), {0, 0});
-    */
 
+    std::cout << "Calculating state's shit" << std::endl;
     std::unordered_map<std::string, std::vector<Entity>> cluster_map;
     for(auto ent: entities)
     {
@@ -137,58 +136,113 @@ bool Statistics::calculate_oddsVector()
         }
     }
 
+    std::cout << "Calculating city's shit" << std::endl;
+    for(auto state: cluster_map)
+    {
+        int size = state.second.size();
+        if(size > 15000)
+        {
+            for(auto ent: state.second)
+            {
+                auto find = cluster_map.find(ent.address.msCityHash);
+                if(find != cluster_map.end())
+                {
+                    find->second.push_back(ent);
+                }
+                else
+                {
+                    std::vector<Entity> new_vec;
+                    new_vec.reserve(15000);
+                    new_vec.push_back(ent);
+                    cluster_map.insert({ent.address.msCityHash, new_vec});
+                }
+            }
+        }
+    }
+
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
     std::time_t start_t = std::chrono::system_clock::to_time_t(start);
 
     std::cout << "" << std::ctime(&start_t) << " " << "Calculating output" << std::endl;
-    std::ofstream file;
-    file.open("output_1.csv");
+    std::cout << cluster_map.size() << std::endl;
+
+    std::vector<std::string> output;
+    output.reserve(100000);
+
     for(auto state: cluster_map)
     {
-        std::cout << state.second[0].address.msState << " " << state.second.size() << std::endl;
+        std::cout << state.second[0].address.msState << " " << state.second[0].address.msCity << " " << state.second.size() << std::endl;
         int size = state.second.size();
-         #pragma omp parallel for
-         for(int i = 0; i < size; i++)
-         {
+
+        if(size > 15000) continue;
+
+        //#pragma omp parallel for
+        for(int i = 0; i < size; i++)
+        {
+            #pragma omp parallel for
             for(int j = i + 1; j < size; j++)
             {
-                double cmp = entities[i].BitMapMake(entities[j]);
-                file << entities[i].id << ',' << entities[j].id << ',' << cmp << std::endl;
+                double cmp = state.second[i].BitMapMake(state.second[j]);
+
+                if(isDuplicate(i, j, ground_truth_map))
+                {
+                    #pragma omp critical
+                    counts[cmp].first++;
+                }
+                else
+                {
+                    #pragma omp critical
+                    counts[cmp].second++;
+                }
+                output.push_back(std::string(std::to_string(state.second[i].id) + ',' + std::to_string(state.second[j].id) + ',' + std::to_string(cmp)));
             }
-         }
-    }
-    file.close();
-
-    end = std::chrono::system_clock::now();
-    std::time_t end_t = std::chrono::system_clock::to_time_t(end);
-    std::cout << std::ctime(&end_t) << " " << "Finished" << std::endl;
-
-    /*
-    //size or length or sth else?
-    for(uint i = 0; i < entities.size(); i++)
-    {
-        #pragma omp parallel for
-        for(uint j = i + 1; j < entities.size(); j++)
-        {
-            //to generate the bitmap, that we'll use as an index for the
-            //oddsVector and counts
-            int cmp = entities[i].BitMapMake(entities[j]);
-
-            //isDuplicate should look for the given ids in the ground_truth file
-            if(isDuplicate(i, j, ground_truth_map)) counts[cmp].first++;
-            else counts[cmp].second++;
+            if(output.size() > 90000)
+            {
+                std::ofstream file;
+                file.open("output.txt", std::ios::app);
+                for(auto str: output)
+                {
+                    file << str << std::endl;
+                }
+                file.close();
+                output.clear();
+            }
         }
+        std::cout << cluster_map.size() << "/" << cnt++ << std::endl;
     }
 
     //Fill the oddsVector with probabilities
     oddsVector.reserve(counts.size());
     for(uint i = 0; i < counts.size(); i++)
     {
-        oddsVector[i] = counts[i].first / (counts[i].first + counts[i].second);
+        if(counts[i].first == 0)
+        {
+            if(counts[i].second == 0)
+            {
+                oddsVector[i] = -1.0;
+            }
+            else oddsVector[i] = 0.0;
+        }
+        else if(counts[i].second == 0)
+        {
+            oddsVector[i] = 1.0;
+        }
+        else
+        {
+            oddsVector[i] = counts[i].first / (counts[i].first + counts[i].second);
+        }
     }
     std::cout << "OddsVector calculated" << std::endl;
-    */
+
+    std::ofstream file;
+    file.open("oddsVector.txt");
+    for(auto d: oddsVector)
+    {
+        file << d << std::endl;
+    }
+    file.close();
+
     return true;
 }
 
