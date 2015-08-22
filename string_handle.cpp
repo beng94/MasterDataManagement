@@ -120,24 +120,20 @@ int StringExactMatch(const std::vector<std::string>& lhs_string,
     return matches;
 }
 
-
 std::string StringWordRemove(std::string sString){
 	std::vector<std::string> saSpaceSplit;
+	std::string sResultString;
+	bool bFlag;
 	split(sString, ' ', saSpaceSplit);
-
-    std::string sResultString;
-	for (int i = 0; i < saSpaceSplit.size() - 1; i++)
-    {
-		for (int j = i + 1; j < saSpaceSplit.size(); j++)
-        {
+	for (int i = 0; i < saSpaceSplit.size() - 1; i++){
+		bFlag = true;
+		for (int j = i + 1; j < saSpaceSplit.size(); j++){
 			if (str_hash(saSpaceSplit[i]) == str_hash(saSpaceSplit[j]))
-            {
-                sResultString += saSpaceSplit[i];
-                break;
-            }
+				bFlag = false;
 		}
+		if (bFlag)
+			sResultString += saSpaceSplit[i] +' ';
 	}
 	sResultString += saSpaceSplit[saSpaceSplit.size()-1];
-
 	return sResultString;
 }
