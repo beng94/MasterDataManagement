@@ -11,15 +11,14 @@ trim(const std::string& str)
     int cnt_end = 0;
 
     for(auto c: str)
-        if(c == ' ' || c == ',')
-            cnt_beg++;
-        else
-            break;
+    {
+        if(c == ' ' || c == ',') cnt_beg++;
+        else break;
+    }
 
     for(int i = str.length(); i >= 0; i--)
     {
-         if(str[i] == ' ' || str[i] == ',')
-             cnt_end++;
+         if(str[i] == ' ' || str[i] == ',') cnt_end++;
          break;
     }
 
