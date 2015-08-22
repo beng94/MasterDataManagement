@@ -22,12 +22,15 @@ double TaxonomyProbabilityCalculate(const Taxonomies& qFirstTaxonomy, const Taxo
 }
 
 int TaxonomyBitMapMaker(const Taxonomies& qFirstTaxonomy, const Taxonomies& qSecondTaxonomy){
-	double fStringSim = StringCheck(qFirstTaxonomy.msTaxonomy, qSecondTaxonomy.msTaxonomy);
-	if (fStringSim < 0.25)
+	std::vector<std::string> saFirstTax, saSecondTax;
+	split(qFirstTaxonomy.msTaxonomy, ' ', saFirstTax);
+	split(qSecondTaxonomy.msTaxonomy, ' ', saSecondTax);
+	double fWordMatch = StringExactMatch(saFirstTax, saSecondTax) / (double) qFirstTaxonomy.msTaxonomy.size();
+	if (fWordMatch < 0.25)
 		return 0;
-	else if (fStringSim < 0.5)
+	else if (fWordMatch < 0.5)
 		return 1;
-	else if (fStringSim < 0.75)
+	else if (fWordMatch < 0.75)
 		return 2;
 	else
 		return 3;
