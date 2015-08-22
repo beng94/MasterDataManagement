@@ -94,7 +94,7 @@ CAddress::CAddress(std::string& sAddressString){
 
 }
 
-/*int AddressBitMapMaker(const CAddress& qFirstAddress, const CAddress& qSecondAddress){
+int AddressBitMapMaker(const CAddress& qFirstAddress, const CAddress& qSecondAddress){
 	double fStreetMatch = StringCheck(qFirstAddress.msStreet, qSecondAddress.msStreet);
 	int iReturnValue = 0;
 	if (ZipCodeCheck(qFirstAddress.msZipCode, qSecondAddress.msZipCode) > 0.8)
@@ -114,9 +114,9 @@ CAddress::CAddress(std::string& sAddressString){
 	if (StringCheck(qFirstAddress.msHouseNumber, qSecondAddress.msHouseNumber) > 0.9)
 		iReturnValue += 32;
 	return iReturnValue;
-}*/
+}
 
-int AddressBitMapMaker(const CAddress& qFirstAddress, const CAddress& qSecondAddress){
+int AddressProbabilityCalculate(const CAddress& qFirstAddress, const CAddress& qSecondAddress){
 	int iReturnValue = 50;
 	double fStreetMatch = StringCheck(qFirstAddress.msStreet, qSecondAddress.msStreet);
 	if (ZipCodeCheck(qFirstAddress.msZipCode, qSecondAddress.msZipCode) > 0.8)

@@ -31,4 +31,6 @@ public:
 
 int AddressBitMapMaker(const CAddress& qFirstAddress, const CAddress& qSecondAddress);
 
+int AddressProbabilityCalculate(const CAddress& qFirstAddress, const CAddress& qSecondAddress);
+
 #endif
