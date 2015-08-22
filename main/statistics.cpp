@@ -9,6 +9,8 @@
 #include <fstream>
 #include <omp.h>
 #include <unordered_map>
+#include <chrono>
+#include <ctime>
 
 #include "../csvparser.h"
 #include "../string_handle.hpp"
@@ -135,23 +137,32 @@ bool Statistics::calculate_oddsVector()
         }
     }
 
-    std::cout << "Calculating output" << std::endl;
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    start = std::chrono::system_clock::now();
+    std::time_t start_t = std::chrono::system_clock::to_time_t(start);
+
+    std::cout << "" << std::ctime(&start_t) << " " << "Calculating output" << std::endl;
     std::ofstream file;
-    file.open("output.csv");
+    file.open("output_1.csv");
     for(auto state: cluster_map)
     {
         std::cout << state.second[0].address.msState << " " << state.second.size() << std::endl;
         int size = state.second.size();
+         #pragma omp parallel for
          for(int i = 0; i < size; i++)
          {
             for(int j = i + 1; j < size; j++)
             {
                 double cmp = entities[i].BitMapMake(entities[j]);
-                file << i << "," << j << "," << cmp << std::endl;
+                file << entities[i].id << ',' << entities[j].id << ',' << cmp << std::endl;
             }
          }
     }
     file.close();
+
+    end = std::chrono::system_clock::now();
+    std::time_t end_t = std::chrono::system_clock::to_time_t(end);
+    std::cout << std::ctime(&end_t) << " " << "Finished" << std::endl;
 
     /*
     //size or length or sth else?
