@@ -89,21 +89,19 @@ double StringCheck(const std::string& sFirstString, const std::string& sSecondSt
 	std::vector<std::string> saFirstString, saSecondString;
 	split(sFirstString, ' ', saFirstString);
 	split(sSecondString, ' ', saSecondString);
-	std::vector<double> faSimilarities;
+    double fProbabilitySum = 0.0;
 
-	for (auto str_a : saFirstString){
+	for (auto str_a : saFirstString)
+    {
 		double fMaxSimilarity = 0.0;
-		for (auto str_b : saSecondString){
+		for (auto str_b : saSecondString)
+        {
 			double fCompare = WordCheck(str_a, str_b);
-			if (fCompare > fMaxSimilarity)
-				fMaxSimilarity = fCompare;
+			if (fCompare > fMaxSimilarity) fMaxSimilarity = fCompare;
 		}
-		faSimilarities.push_back(fMaxSimilarity);
+        fProbabilitySum += fMaxSimilarity * str_a.length();
 	}
 
-	double fProbabilitySum = 0.0;
-	for (uint i = 0; i < saFirstString.size(); i++)
-		fProbabilitySum += faSimilarities.at(i) * saFirstString.at(i).length();
 	return fProbabilitySum / (sFirstString.length() - saFirstString.size() + 1);
 }
 
