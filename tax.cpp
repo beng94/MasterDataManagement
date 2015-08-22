@@ -25,7 +25,7 @@ int TaxonomyBitMapMaker(const Taxonomies& qFirstTaxonomy, const Taxonomies& qSec
 	std::vector<std::string> saFirstTax, saSecondTax;
 	split(qFirstTaxonomy.msTaxonomy, ' ', saFirstTax);
 	split(qSecondTaxonomy.msTaxonomy, ' ', saSecondTax);
-	double fWordMatch = StringExactMatch(saFirstTax, saSecondTax) / (double) qFirstTaxonomy.msTaxonomy.size();
+	double fWordMatch = StringExactMatch(saFirstTax, saSecondTax) / (double) saFirstTax.size();
 	if (fWordMatch < 0.25)
 		return 0;
 	else if (fWordMatch < 0.5)

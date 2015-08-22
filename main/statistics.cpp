@@ -117,7 +117,7 @@ bool Statistics::calculate_oddsVector()
     std::cout << "Ground truth file read in" << std::endl;
 
     //first for good guess, second for bad
-    std::vector<std::pair<int, int>> counts (8192, {0, 0});
+    std::vector<std::pair<int, int>> counts (4096, {0, 0});
 
     std::cout << "Calculating state's shit" << std::endl;
     std::unordered_map<std::string, std::vector<Entity>> cluster_map;
@@ -221,6 +221,7 @@ bool Statistics::calculate_oddsVector()
         }
         else
         {
+            //TODO: size < 50 -> -1
             oddsVector[i] = ((double)(counts[i].first)) / (double)(counts[i].first + counts[i].second);
         }
     }
