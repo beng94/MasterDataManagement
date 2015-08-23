@@ -11,7 +11,7 @@
 #include <unordered_map>
 #include <chrono>
 #include <ctime>
-#include <boost/progress.hpp>
+#include <iomanip>
 
 #include "../csvparser.h"
 #include "../string_handle.hpp"
@@ -196,46 +196,49 @@ bool Statistics::calculate_oddsVector()
             }
         }
         std::cout << cluster_map.size() << "/" << cnt++ << std::endl;
-        if(cnt == 47) break;
     }
 
     //Fill the oddsVector with probabilities
     oddsVector.reserve(counts.size());
     for(int i = 0; i < counts.size(); i++)
     {
-        oddsVector.push_back(-1);
+        oddsVector.push_back(-1.0);
     }
     for(uint i = 0; i < counts.size(); i++)
     {
-        if(counts[i].first == 0)
+        double cnt = counts[i].first + counts[i].second;
+        if(cnt > 50)
         {
-            if(counts[i].second == 0)
+            if(counts[i].first == 0)
             {
-                oddsVector[i] = -1.0;
+                if(counts[i].second == 0)
+                {
+                    oddsVector[i] = -1.0;
+                }
+                else oddsVector[i] = 0.0;
             }
-            else oddsVector[i] = 0.0;
-        }
-        else if(counts[i].second == 0)
-        {
-            oddsVector[i] = 1.0;
+            else if(counts[i].second == 0)
+            {
+                oddsVector[i] = 1.0;
+            }
+            else
+            {
+                oddsVector[i] = counts[i].first / cnt;
+            }
         }
         else
         {
-            //TODO: size < 50 -> -1
-            oddsVector[i] = ((double)(counts[i].first)) / (double)(counts[i].first + counts[i].second);
+            oddsVector[i] = -1.0;
         }
     }
     std::cout << "OddsVector calculated" << std::endl;
 
     std::ofstream file;
     file.open("oddsVector.txt");
-    /*for(auto d: oddsVector)
-    {
-        file << (double)d << std::endl;
-    }*/
     for(int i = 0; i< counts.size(); i++)
     {
-         file << oddsVector[i] << " "<< counts[i].first << " " << counts[i].second << std::endl;
+        file << std::fixed << std::setprecision(6);
+        file << oddsVector[i] << std::endl;
     }
     file.close();
 
