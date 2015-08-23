@@ -137,3 +137,11 @@ std::string StringWordRemove(std::string sString){
 	sResultString += saSpaceSplit[saSpaceSplit.size()-1];
 	return sResultString;
 }
+
+bool StringIsANumber(const std::string& sNumberString){
+	for (int i = 0; i < sNumberString.size(); i++){
+		if (sNumberString[i] != '-' && sNumberString[i] != '.' && !(sNumberString[i] >= '0' && sNumberString[i] <= '9'))
+			return false;
+	}
+	return true;
+}
